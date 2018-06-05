@@ -1,1 +1,0 @@
-for table in page:
