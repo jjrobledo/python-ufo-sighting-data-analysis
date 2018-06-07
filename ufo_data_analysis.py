@@ -54,8 +54,8 @@ def sightigsByYearGraph(dataframe):
 
 
 #test
-sightigsByYearGraph(years())
-shapeGraph(countShapes())
+#sightigsByYearGraph(years())
+#shapeGraph(countShapes())
 
 shapeSightingsYear = ufoDf.groupby(['Year', 'Shape']).agg(len) # use .loc[xxxx] to call for a specific year
 shapeSightingsYear = shapeSightingsYear.drop(['Unnamed: 0', 'Date', 'Duration', 'Summary', 'Month', 'Time', 'State', 'Posted'], axis=1)
