@@ -67,3 +67,11 @@ def findSightingsPerYear():
     for year in years().Year:
         for item in ufoShapeArray:
                 print(shapeSightingsYear.loc[year,item])
+
+
+for shape in ufoDf.Shape.unique():
+    print(shape)
+    x = shapeSightingsYear['Number of Occurances'][:, shape].index[-45:]
+    y = shapeSightingsYear['Number of Occurances'][:, shape][-45:]
+    plt.plot(x, y)
+    plt.show()
