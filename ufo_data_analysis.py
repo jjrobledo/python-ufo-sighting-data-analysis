@@ -64,26 +64,14 @@ shapeSightingsYear.columns = ['Number of Occurances']
 #shapeSightingsYear.loc[1998, 'LIGHT'].values
 def makeUfoGraphYear():
 
-    xlist =  np.arange(1974, 2019)
-    yDictionary = {}
-    for shape in ufoDf.Shape.unique():
-        #xDictionary[shape] = shapeSightingsYear['Number of Occurances'][:, shape].index[-45:]
-        yDictionary[shape] = shapeSightingsYear['Number of Occurances'][:, shape][-45:]
-        #print(shape)
-
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1)
-    ax.set_title('Number of UFO Sightings by Shape (1974-present)')
-    plt.plot(xlist, yDictionary.get('OVAL'))
-    plt.plot(xlist, yDictionary.get('LIGHT'))
 
+    for shape in ufoDf.Shape.unique():
+        xAxis = shapeSightingsYear['Number of Occurances'][:, shape][-45:].index
+        yAxis = shapeSightingsYear['Number of Occurances'][:, shape][-45:].values
+        ax.set_title('Number of UFO Sightings by Shape (1974-present)')
+        ax.set_xticks(np.arange(1974, 2019, 4))
+        plt.plot(xAxis, yAxis)
+    #plt.plot(xlist, yDictionary.get('LIGHT'))
     plt.show()
-
-'''
-    
-    ax.set_title('Number of UFO Sightings by Shape (1974-present)')
-    x = shapeSightingsYear['Number of Occurances'][:, shape].index[-45:]
-    y = shapeSightingsYear['Number of Occurances'][:, shape][-45:]
-    plt.plot(x, y)
-    plt.show()
-'''
