@@ -60,8 +60,10 @@ def sightigsByYearGraph(dataframe):
 shapeSightingsYear = ufoDf.groupby(['Year', 'Shape']).agg(len) # use .loc[xxxx] to call for a specific year
 shapeSightingsYear = shapeSightingsYear.drop(['Unnamed: 0', 'Date', 'Duration', 'Summary', 'Month', 'Time', 'State', 'Posted'], axis=1)
 shapeSightingsYear.columns = ['Number of Occurances']
-# find the number of light sightings in 1998
-#shapeSightingsYear.loc[1998, 'LIGHT'].values
+shapeSightingsYear = shapeSightingsYear .unstack(fill_value=0)
+shapeSightingsYear = shapeSightingsYear.stack()
+
+
 def makeUfoGraphYear():
 
     fig = plt.figure()
@@ -72,6 +74,8 @@ def makeUfoGraphYear():
         yAxis = shapeSightingsYear['Number of Occurances'][:, shape][-45:].values
         ax.set_title('Number of UFO Sightings by Shape (1974-present)')
         ax.set_xticks(np.arange(1974, 2019, 4))
-        plt.plot(xAxis, yAxis)
-    #plt.plot(xlist, yDictionary.get('LIGHT'))
+        plt.plot(xAxis, yAxis, label=shape)
+    ax.legend(loc=2, fontsize='x-small')
+    ax.set_xlabel('Year')
+    ax.set_ylabel('Number of Sightings')
     plt.show()
