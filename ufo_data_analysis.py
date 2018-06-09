@@ -1,16 +1,16 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+import calendar
 
 
 pd.set_option('display.expand_frame_repr', False)
 
 ufoDf = pd.read_csv('ufo_reports.csv')
 
+ufoDf['Month'] = ufoDf['Month'].apply(lambda x: calendar.month_name[x])
 ufoDf['Shape'] = ufoDf['Shape'].fillna(value='EMPTY')
 ufoDf['Shape'] = ufoDf['Shape'].str.upper()
-#ufoDf.Shape.str.upper().unique() # I need to drop NaN from the column values
-
 
 ufoShapeArray = []
 for i in ufoDf.Shape.str.upper().unique():
@@ -52,19 +52,23 @@ def sightigsByYearGraph(dataframe):
     plt.plot(plt_x, plt_y)
     plt.show()
 
-
-#test
-#sightigsByYearGraph(years())
-#shapeGraph(countShapes())
-
 shapeSightingsYear = ufoDf.groupby(['Year', 'Shape']).agg(len) # use .loc[xxxx] to call for a specific year
-shapeSightingsYear = shapeSightingsYear.drop(['Unnamed: 0', 'Date', 'Duration', 'Summary', 'Month', 'Time', 'State', 'Posted'], axis=1)
+shapeSightingsYear = shapeSightingsYear.drop(['Unnamed: 0', 'Date', 'Duration', 'Summary', 'Month', 'Time', 'State',
+                                              'Posted'], axis=1)
 shapeSightingsYear.columns = ['Number of Occurances']
 shapeSightingsYear = shapeSightingsYear .unstack(fill_value=0)
 shapeSightingsYear = shapeSightingsYear.stack()
 
+shapeSightingsMonth = ufoDf.groupby(['Year', 'Month', 'Date']).agg(len) # use .loc[xxxx] to call for a specific year
+shapeSightingsMonth = shapeSightingsMonth.drop(['Duration', 'Summary','Time', 'State',
+                                                'City', 'Shape', 'Posted'], axis=1)
+shapeSightingsMonth.columns = ['Number of Occurances']
+shapeSightingsMonth = shapeSightingsMonth.unstack(fill_value=0)
+shapeSightingsMonth = shapeSightingsMonth.stack()
+#shapeSightingsMonth['Number of Occurances'][2017, "August"]
 
 def makeUfoGraphYear():
+    ''' This function will show how the frequency of ufo sightings has changed of time as a function of its shape. '''
 
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1)
