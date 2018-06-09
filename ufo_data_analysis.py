@@ -4,6 +4,9 @@ import numpy as np
 import calendar
 # TODO rename shapeSightingsMonth to something more appropriate.
 # TODO Combine shapeSightingsYear and shapeSightingsMonth by adding shapes to shapeSightingsMonth.
+# TODO It looks like the Function year() is not used -- delete it
+# TODO move lines 14-16 to dataframe_cleaner.py
+# TODO shapeGraph needs axis lables and needs the y-lables cleaned.
 
 pd.set_option('display.expand_frame_repr', False)
 
@@ -25,7 +28,10 @@ def countShapes():
     return shapeCounts
 
 def shapeGraph(dataframe):
-
+    """
+    Takes countShapes() as the input dataframe.
+    Generates a bar graph with a list of shapes on the y-axis and their frequency of the x-axis.
+    """
     fig, ax = plt.subplots()
     shapes = dataframe.index.values
     ypos = np.arange(len(dataframe.index.values))
@@ -40,8 +46,10 @@ def shapeGraph(dataframe):
 
 
 def years():
-    ''' The national UFO reporting center opened in 1974. I assume that only the data from 1974 will be comprehensive
-    enough to be useful. Only collect the years starting then. '''
+    """
+    The national UFO reporting center opened in 1974. I assume that only the data from 1974
+    will be comprehensive enough to be useful. Only collect the years starting then.
+    """
     yearDf = ufoDf.Year.value_counts()
     yearDf = yearDf.sort_index(ascending=False)
     yearDf = yearDf.iloc[:-75]
@@ -71,7 +79,10 @@ shapeSightingsMonth = shapeSightingsMonth.stack()
 #shapeSightingsMonth['Number of Occurances'][2017, "August"]
 
 def makeUfoGraphYear():
-    ''' This function will show how the frequency of ufo sightings has changed of time as a function of its shape. '''
+    """
+    This function will show how the frequency of ufo sightings has changed of time as a
+    function of its shape.
+    """
 
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1)
