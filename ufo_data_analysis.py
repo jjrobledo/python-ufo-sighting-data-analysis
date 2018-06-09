@@ -2,7 +2,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import calendar
-
+# TODO rename shapeSightingsMonth to something more appropriate.
+# TODO Combine shapeSightingsYear and shapeSightingsMonth by adding shapes to shapeSightingsMonth.
 
 pd.set_option('display.expand_frame_repr', False)
 
@@ -39,9 +40,11 @@ def shapeGraph(dataframe):
 
 
 def years():
+    ''' The national UFO reporting center opened in 1974. I assume that only the data from 1974 will be comprehensive
+    enough to be useful. Only collect the years starting then. '''
     yearDf = ufoDf.Year.value_counts()
     yearDf = yearDf.sort_index(ascending=False)
-    yearDf = yearDf.iloc[:-75] # The national UFO reporting center opened in 1974 only collect the years starting then
+    yearDf = yearDf.iloc[:-75]
     yearDf = yearDf.reset_index()
     yearDf.columns = ['Year', 'Number of Sightings']
     return yearDf
@@ -59,7 +62,7 @@ shapeSightingsYear.columns = ['Number of Occurances']
 shapeSightingsYear = shapeSightingsYear .unstack(fill_value=0)
 shapeSightingsYear = shapeSightingsYear.stack()
 
-shapeSightingsMonth = ufoDf.groupby(['Year', 'Month', 'Date']).agg(len) # use .loc[xxxx] to call for a specific year
+shapeSightingsMonth = ufoDf.groupby(['Year', 'Month', 'Date']).agg(len)
 shapeSightingsMonth = shapeSightingsMonth.drop(['Duration', 'Summary','Time', 'State',
                                                 'City', 'Shape', 'Posted'], axis=1)
 shapeSightingsMonth.columns = ['Number of Occurances']
