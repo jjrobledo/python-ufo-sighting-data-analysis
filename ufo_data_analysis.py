@@ -82,7 +82,8 @@ def sightingsByShape():
 
     :return:
     """
-    df1 = ufoDf.groupby(['Year', 'Shape']).agg(len)  # use .loc[xxxx] to call for a specific year
+    df = ufoDf[~ufoDf['Shape'].isin(['EMPTY'])]
+    df1 = df.groupby(['Year', 'Shape']).agg(len)  # use .loc[xxxx] to call for a specific year
     df1 = df1.drop(['Unnamed: 0', 'Date', 'Duration', 'Summary', 'Month', 'Time', 'State',
                                                   'Posted'], axis=1)
     df1.columns = ['Number of Occurances']
@@ -92,7 +93,7 @@ def sightingsByShape():
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1)
 
-    for shape in ufoDf.Shape.unique():
+    for shape in df.Shape.unique():
         xAxis = df1['Number of Occurances'][:, shape][-45:].index
         yAxis = df1['Number of Occurances'][:, shape][-45:].values
         ax.set_title('Number of UFO Sightings by Shape (1974-present)')
