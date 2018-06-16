@@ -131,3 +131,13 @@ def annualHeatmap():
     ax = sns.heatmap(df3, vmin=5, vmax=16, square=True, linewidth=0.3, ax=ax, cbar_ax=cbar_ax,
                      cbar_kws={"orientation": "horizontal"})
     plt.show()
+
+def movieSightings(year, month, daterange):
+    df2 = ufoDf.groupby(['Year', 'Month', 'Date', 'Shape']).agg(len)
+    df2 = df2.drop(['Duration', 'Summary', 'Time', 'State',
+                                                    'City', 'Posted'], axis=1)
+    df2.columns = ['Number of Occurances']
+    df2 = df2.unstack(fill_value=0)
+    df2 = df2.stack()
+
+    return df2.loc[year]['Number of Occurances'][month].loc[daterange].sum()

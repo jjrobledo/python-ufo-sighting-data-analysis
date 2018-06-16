@@ -1,5 +1,7 @@
 import pandas as pd
 from imdb import IMDb
+import time
+from datetime import datetime, date, time, timedelta
 
 pd.set_option('display.expand_frame_repr', False)
 
@@ -37,5 +39,15 @@ def movieLookup():
             print(count)
         except (KeyError, IndexError):
             pass
+    print('Done!')
+    return df3
 
-    df3.to_csv('ufo-movie-releases')
+    df3.to_csv('ufo-movie-releases.csv')
+
+filename2 = pd.read_csv('ufo-movie-releases.csv')
+movieDf2 = pd.DataFrame(filename2)
+
+
+movieDf2['Release Date'] = movieDf2['Release Date'].map(lambda x: str(x)[:11]) # strip the date out of the column
+movieDf2['Release Date'] = pd.to_datetime(movieDf2['Release Date']) # Change the dtype of the column
+
