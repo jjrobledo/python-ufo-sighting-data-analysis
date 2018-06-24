@@ -277,7 +277,9 @@ def yearGraphSeasonal2(startdate, enddate):
     start_time = datetime.datetime.strptime(str(startdate), '%Y%m%d')
     end_time = datetime.datetime.strptime(str(enddate), '%Y%m%d')
 
-    mask = (ufoDf['Date'] > start_time.strftime('%Y-%m-%d')) & (ufoDf['Date'] <= end_time.strftime('%Y-%m-%d'))
+    mask = (ufoDf['Date'] > start_time.strftime('%Y-%m-%d')) & (ufoDf['Date'] <= end_time.strftime('%Y-%m-%d')) & (ufoDf['Shape'] != 'LIGHT') & (ufoDf['Shape'] != 'FLASH')
+    #mask = (ufoDf['Date'] > start_time.strftime('%Y-%m-%d')) & (ufoDf['Date'] <= end_time.strftime('%Y-%m-%d'))
+
 
     time_series = pd.DataFrame(ufoDf.loc[mask]['Date'].value_counts())  # it may be worthwhile to reset the index and sort the col
     time_series = time_series.resample('D').sum().fillna(0)
@@ -294,13 +296,14 @@ def yearGraphSeasonal2(startdate, enddate):
     time_series['rolling'] = time_series['Date'].rolling(12).mean()
     time_series['diff'] = time_series['Date'].diff(4)
     corrections = time_series['rolling']
-    raw = time_series['Date']
+    y = time_series['Date']
+    x = time_series['pytime']
     diff = time_series['diff']
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1)
 
-    ax = sns.regplot('pytime_f','rolling', time_series, marker='+', order=2, ci=None, truncate=True)
-    labels = pd.Series(ax.get_xticks()).map(mapping).fillna('')
-    ax.set_xticklabels(labels)
-    #ax = plt.plot(time_series.index, raw, linewidth=.3)
+    #ax = sns.regplot('pytime_f','rolling', time_series, marker='+', order=2, ci=None, truncate=True)
+    #labels = pd.Series(ax.get_xticks()).map(mapping).fillna('')
+    #ax.set_xticklabels(labels)
+    ax = plt.plot(time_series.index, corrections, linewidth=.3)
     plt.show()
