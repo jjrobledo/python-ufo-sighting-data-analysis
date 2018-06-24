@@ -1,5 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+from matplotlib import dates
 import numpy as np
 import seaborn as sns
 from datetime import timedelta
@@ -209,11 +210,11 @@ def yearGraph():
     plt.show()
 
 def yearGraphSeasonal():
-    mask = (ufoDf['Date'] > '1987-1-1') & (ufoDf['Date'] <= '1987-12-31')
+    mask = (ufoDf['Date'] > '1987-1-1') & (ufoDf['Date'] <= '1988-12-31')
     time_series = pd.DataFrame(ufoDf.loc[mask]['Date'].value_counts())  # it may be worthwhile to reset the index and sort the col
     time_series = time_series.resample('D').sum().fillna(0)
     time_series = time_series.sort_index()
-    time_series = time_series.reindex(pd.date_range("1987-01-01", "1987-12-31"), fill_value=0)
+    time_series = time_series.reindex(pd.date_range("1987-01-01", "1988-12-31"), fill_value=0)
     #time_series = time_series.set_index('index')
 
     time_series['rolling'] = time_series['Date'].rolling(12).mean()
@@ -272,13 +273,23 @@ def yearGraphSeasonal():
     plt.show()
     #data = time_series['Date'].rolling(12).mean()
 
-def yearGraphSeasonal2():
-    mask = (ufoDf['Date'] > '2014-1-1') & (ufoDf['Date'] <= '2015-12-31')
+def yearGraphSeasonal2(startdate, enddate):
+    start_time = datetime.datetime.strptime(str(startdate), '%Y%m%d')
+    end_time = datetime.datetime.strptime(str(enddate), '%Y%m%d')
+
+    mask = (ufoDf['Date'] > start_time.strftime('%Y-%m-%d')) & (ufoDf['Date'] <= end_time.strftime('%Y-%m-%d'))
+
     time_series = pd.DataFrame(ufoDf.loc[mask]['Date'].value_counts())  # it may be worthwhile to reset the index and sort the col
     time_series = time_series.resample('D').sum().fillna(0)
     time_series = time_series.sort_index()
-    time_series = time_series.reindex(pd.date_range("2014-01-01", "2014-12-31"), fill_value=0)
+    time_series = time_series.reindex(pd.date_range(start_time, end_time), fill_value=0)
+    time_series['pytime'] = time_series.index
+    #time_series['pytime'] = time_series['pytime'].astype(int)
     #time_series = time_series.set_index('index')
+
+    time_series['pytime_f'] = pd.factorize(time_series['pytime'])[0] + 1
+    mapping = dict(zip(time_series['pytime_f'], time_series['pytime'].dt.date))
+
 
     time_series['rolling'] = time_series['Date'].rolling(12).mean()
     time_series['diff'] = time_series['Date'].diff(4)
@@ -287,5 +298,9 @@ def yearGraphSeasonal2():
     diff = time_series['diff']
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1)
-    plt.plot(time_series.index, diff)
+
+    ax = sns.regplot('pytime_f','rolling', time_series, marker='+', order=2, ci=None, truncate=True)
+    labels = pd.Series(ax.get_xticks()).map(mapping).fillna('')
+    ax.set_xticklabels(labels)
+    #ax = plt.plot(time_series.index, raw, linewidth=.3)
     plt.show()
