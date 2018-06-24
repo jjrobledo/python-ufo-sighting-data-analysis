@@ -3,7 +3,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 from datetime import timedelta
-import datetime
+from datetime import datetime
+import datetime as datetime
 
 # TODO Combine shapeSightingsYear and shapeSightingsMonth by adding shapes to shapeSightingsMonth.
 # TODO move lines 14-16 to dataframe_cleaner.py
@@ -199,42 +200,92 @@ def movieSightings(indexvalue):
 
 def yearGraph():
     mask = (ufoDf['Date'] > '1987-1-1') & (ufoDf['Date'] <= '1987-12-31')
-    time_series = pd.DataFrame(
-        ufoDf.loc[mask]['Date'].value_counts())  # it may be worthwhile to reset the index and sort the col
+    time_series = pd.DataFrame(ufoDf.loc[mask]['Date'].value_counts())  # it may be worthwhile to reset the index and sort the col
     time_series = time_series.resample('D').sum().fillna(0)
     time_series = time_series.sort_index()
     time_series = time_series.reindex(pd.date_range("1987-01-01", "1987-12-31"), fill_value=0)
-    time_series = time_series.reset_index()
 
-
-    plt.plot(time_series['index'], time_series['Date'])
+    plt.plot(time_series.index, time_series['Date'])
     plt.show()
 
 def yearGraphSeasonal():
     mask = (ufoDf['Date'] > '1987-1-1') & (ufoDf['Date'] <= '1987-12-31')
-    time_series = pd.DataFrame(
-        ufoDf.loc[mask]['Date'].value_counts())  # it may be worthwhile to reset the index and sort the col
+    time_series = pd.DataFrame(ufoDf.loc[mask]['Date'].value_counts())  # it may be worthwhile to reset the index and sort the col
     time_series = time_series.resample('D').sum().fillna(0)
     time_series = time_series.sort_index()
     time_series = time_series.reindex(pd.date_range("1987-01-01", "1987-12-31"), fill_value=0)
-    time_series = time_series.reset_index()
+    #time_series = time_series.set_index('index')
 
-    data = time_series['Date'].rolling(12).mean()
+    time_series['rolling'] = time_series['Date'].rolling(12).mean()
+    corrections = time_series['rolling']
+    raw = time_series['Date']
 
+    fig = plt.figure(figsize=(13,8))
+    ax = fig.add_subplot(1, 1, 1)
+
+    ax.set_xlabel('Date')
+    ax.set_ylabel('Number of Sightings per Day (corrected)')
+    ax.set_title('Increase in Sightings During the Release of Communion')
+
+    corrections.plot(ax=ax, style='k-')
+    #plt.plot(time_series['index'], data)
+    nyt_data = dict([(datetime.datetime(1987, 3, 1), 'Communion\nenters NYT\nBestseller List\nat #12'),
+                (datetime.datetime(1987, 3, 25), 'Communion\nreaches #3'),
+                (datetime.datetime(1987, 5, 10), 'Communion is the\n#1 Bestseller'),
+                (datetime.datetime(1987, 7, 2), 'Communion falls out of top 3'),
+                (datetime.datetime(1987, 8, 9), 'Falls to #11'),
+                (datetime.datetime(1987, 8, 30), 'Rises to #8'),
+                (datetime.datetime(1987, 9, 20), 'Last week on\nlist as #15')])
+
+    ax.annotate(nyt_data.values()[0], xy=(nyt_data.keys()[0], corrections.asof(nyt_data.keys()[0]) + .2),
+                xytext=(nyt_data.keys()[0], corrections.asof(nyt_data.keys()[0]) + 1.33),
+                arrowprops=dict(facecolor='red', shrink=0.05, headwidth=4, width=2, headlength=4),
+                horizontalalignment='right', verticalalignment='top')
+
+    ax.annotate(nyt_data.values()[3], xy=(nyt_data.keys()[3], corrections.asof(nyt_data.keys()[3]) + .2),
+                xytext=(nyt_data.keys()[3], corrections.asof(nyt_data.keys()[3]) + 1.25),
+                arrowprops=dict(facecolor='red', shrink=0.05, headwidth=4, width=2, headlength=4),
+                horizontalalignment='right', verticalalignment='top')
+
+    ax.annotate(nyt_data.values()[4], xy=(nyt_data.keys()[4], corrections.asof(nyt_data.keys()[4]) + .2),
+                xytext=(nyt_data.keys()[4], corrections.asof(nyt_data.keys()[4]) + .75),
+                arrowprops=dict(facecolor='red', shrink=0.05, headwidth=4, width=2, headlength=4),
+                horizontalalignment='left', verticalalignment='top')
+
+#    ax.annotate(nyt_data.values()[5], xy=(nyt_data.keys()[5], corrections.asof(nyt_data.keys()[5]) + .2),
+#                xytext=(nyt_data.keys()[5], corrections.asof(nyt_data.keys()[5]) + .75),
+#                arrowprops=dict(facecolor='red', shrink=0.05, headwidth=4, width=2, headlength=4),
+#                horizontalalignment='left', verticalalignment='top')
+
+    ax.annotate(nyt_data.values()[6], xy=(nyt_data.keys()[6], corrections.asof(nyt_data.keys()[6]) + .2),
+                xytext=(nyt_data.keys()[6], corrections.asof(nyt_data.keys()[6]) + 1.08),
+                arrowprops=dict(facecolor='red', shrink=0.05, headwidth=4, width=2, headlength=4),
+                horizontalalignment='right', verticalalignment='top')
+
+    ax.annotate(nyt_data.values()[1], xy=(nyt_data.keys()[1], corrections.asof(nyt_data.keys()[1]) + .2),
+                xytext=(nyt_data.keys()[1], corrections.asof(nyt_data.keys()[1]) + 1),
+                arrowprops=dict(facecolor='red', shrink=0.05, headwidth=4, width=2, headlength=4),
+                horizontalalignment='left', verticalalignment='top')
+
+    plt.savefig('figpath.png', dpi=300)
+
+    plt.show()
+    #data = time_series['Date'].rolling(12).mean()
+
+def yearGraphSeasonal2():
+    mask = (ufoDf['Date'] > '2014-1-1') & (ufoDf['Date'] <= '2015-12-31')
+    time_series = pd.DataFrame(ufoDf.loc[mask]['Date'].value_counts())  # it may be worthwhile to reset the index and sort the col
+    time_series = time_series.resample('D').sum().fillna(0)
+    time_series = time_series.sort_index()
+    time_series = time_series.reindex(pd.date_range("2014-01-01", "2014-12-31"), fill_value=0)
+    #time_series = time_series.set_index('index')
+
+    time_series['rolling'] = time_series['Date'].rolling(12).mean()
+    time_series['diff'] = time_series['Date'].diff(4)
+    corrections = time_series['rolling']
+    raw = time_series['Date']
+    diff = time_series['diff']
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1)
-    plt.plot(time_series['index'], data)
-    nyt_data = [(datetime(1987, 3, 1), 'Communion enters NYT Bestsell List at #12'),
-                (datetime(1987, 3, 25), 'Communion reaches #3'),
-                (datetime(1987, 5, 10), 'Communion is the #1 Bestseller'),
-                (datetime(1987, 7, 2), 'Communion falls out of top 3'),
-                (datetime(1987, 8, 9), 'Falls to #11'),
-                (datetime(1987, 8, 30), 'Rises to #8'),
-                (datetime(1987, 9, 20), 'Last week on list as #15')]
-    for date, label in nyt_data:
-        ax.annotate(label,xy=data.asof(date) + 75),
-                    xytext=(date, data.asof(date) + 225),
-                    arrowprops=dict(facecolor='red', headwidth=4, width=2, headlenght=4),
-                    horizontalalingment='left', verticalalignment='top')
-
-    plt.show()    data = time_series['Date'].rolling(12).mean()
+    plt.plot(time_series.index, diff)
+    plt.show()

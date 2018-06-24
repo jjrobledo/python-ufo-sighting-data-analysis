@@ -1,4 +1,5 @@
 import pandas as pd
+from datetime import datetime
 from geopy.geocoders import Nominatim
 import ssl
 
@@ -22,10 +23,22 @@ ufoDfCopy = ufoDf['Date'].str[:].str.split(' ', expand=True) # ufoDfCopy contain
 ufoDf = ufoDfCopy.join(ufoDf) # join the new dataframe to the old dataframe as new columsn
 ufoDf = ufoDf.drop(['Date'], axis=1) # Drop the old column that we don't need any longer
 ufoDf.columns = ['Date', 'Time', 'City', 'State', 'Shape', 'Duration', 'Summary', 'Posted', 'Year', 'Month']
-ufoDf['Date'] = ufoDf['Date'].str.split('/').str[-2] # Remove month an year from date column
+ufoDf['Day'] = ufoDf['Date'].str.split('/').str[-2] # Remove month an year from date column
+ufoDf['Shape'] = ufoDf['Shape'].fillna(value='EMPTY')
+ufoDf['Shape'] = ufoDf['Shape'].str.upper()
+#ufoDf.Date = pd.to_datetime(ufoDf[['Day', 'Month', 'Year', 'Time']], format='%d%m%y', errors='ignore')
+ufoDf.Date = pd.to_datetime(ufoDf[['Year', 'Month', 'Day']], errors='coerce')
+
+replacements = {'Shape': {'TRIANGULAR': 'TRIANGLE', 'DELTA': 'TRIANGLE', 'TEARDROP': 'OVAL', 'EGG': 'OVAL', 'CIGAR': 'CYLINDER', 'FLASH': 'FLARE', 'CHANGED': 'CHANGING', 'CIRCLE': 'DISK', 'ROUND': 'DISK'}}
+ufoDf = ufoDf.replace(replacements)
+
+
+
+
+
 
 # Get the lat and long for each city/state reported
-
+'''
 latLongDf = pd.DataFrame(columns = ['Lat', 'Long'])
 count = 0
 condition = True
@@ -41,4 +54,6 @@ while condition == True:
         print count
 
 # Save the modified dataframe to a new CSV
-#ufoDf.to_csv('ufo_reports.csv')
+'''
+ufoDf.to_csv('ufo_reports.csv')
+

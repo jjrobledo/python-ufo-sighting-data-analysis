@@ -40,14 +40,17 @@ def movieLookup():
         except (KeyError, IndexError):
             pass
     print('Done!')
-    return df3
-
     df3.to_csv('ufo-movie-releases.csv')
 
+
+#df3 = movieLookup()
 filename2 = pd.read_csv('ufo-movie-releases.csv')
-movieDf2 = pd.DataFrame(filename2)
+df3 = pd.DataFrame(filename2)
 
 
-movieDf2['Release Date'] = movieDf2['Release Date'].map(lambda x: str(x)[:11]) # strip the date out of the column
-movieDf2['Release Date'] = pd.to_datetime(movieDf2['Release Date']) # Change the dtype of the column
+df3['Release Date'] = df3['Release Date'].map(lambda x: str(x)[:11]) # strip the date out of the column
+df3['Release Date'] = pd.to_datetime(df3['Release Date']) # Change the dtype of the column
+
+df3.to_csv('ufo-movie-releases.csv')
+
 
