@@ -28,23 +28,24 @@ def shapeGraph():
     for i in ufoDf.Shape.str.upper().unique():
         ufoShapeArray.append(i)
 
-    shapeCounts = pd.DataFrame(index=[ufoShapeArray], columns=['Count'])
-    for i in ufoShapeArray:
-        shapeCounts.loc[i] = ufoDf.Shape.str.contains(i).sum()
+    shapeCounts = pd.DataFrame(ufoDf.Shape.value_counts())
+
     shapeCounts = shapeCounts.drop(['EMPTY', 'HEXAGON', 'CRESCENT','PYRAMID', 'DOME']) # Remove useless values
-    shapeCounts = shapeCounts.reset_index()
-    shapeCounts.columns = ['Shape', 'Count']
-    shapes = shapeCounts.Shape
+    shapeCounts.columns = ['Count']
+    #shapes = shapeCounts.index()
 
-    fig, ax = plt.subplots()
-    ypos = np.arange(len(shapeCounts.index.values))
-    num_reports = shapeCounts.Count.values
+    ax = plt.subplots()
 
-    ax.barh(ypos, num_reports, align='center', color='green')
-    ax.set_yticks(ypos)
-    ax.set_yticklabels(shapes)
-    ax.invert_yaxis()
+    #ax.barh(ypos, num_reports, align='center', color='green')
+    #ax.set_yticks(ypos)
+    #ax.set_yticklabels(shapes)
 
+
+
+    ax = shapeCounts.plot.barh()
+    ax.set_xlabel('Number of Reports')
+    ax.set_ylabel('Shape of Reported UFO')
+    ax.set_title('Most Commonly Reported UFO Shapes')
     plt.show()
 
 def sightigsByYear():
