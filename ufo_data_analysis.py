@@ -155,58 +155,72 @@ def getDateRange(movieReleaseDate):
 
 def movieSightings(indexvalue):
     '''
-    This function will find the number of dates for a given day
-    :param date: datetime object
-    :return: the number of sightings for a give day
+    This function will take an index value from movieDf2 and calculate a 15 day release window
+    for the movie.
+    :param indexvalue: int
+    :return: Dataframe containing a time series of datetime objects
 
     '''
-    df2 = ufoDf.groupby(['Year', 'Month', 'Date', 'Shape']).agg(len)
-    df2 = df2.drop(['Duration', 'Summary', 'Time', 'State',
-                                                    'City', 'Posted'], axis=1)
-    df2.columns = ['Number of Occurances']
-    df2 = df2.unstack(fill_value=0)
-    df2 = df2.stack()
-    list = []
-    date = movieDf2.iloc[indexvalue]['Release Date']
 
-    for i in getDateRange(date):
+    date = movieDf2['Release Date'][indexvalue]
 
-        try:
-            list.append(df2.loc[i.year].loc[i.month]['Number of Occurances'].loc[i.day].sum())
-        except KeyError:
-            list.append(0)
+    releaseWindow = getDateRange(date)
+    dateLow = releaseWindow[0]
+    dateHigh = releaseWindow[-1]
+    yearStart = datetime.datetime.strptime(str(dateLow.year) + '0101', '%Y%m%d').date()
+    yearEnd = datetime.datetime.strptime(str(dateHigh.year + 1) + '0101', '%Y%m%d').date()
 
-    npList = np.array(list)
+    yearMask = (ufoDf['Date'] > yearStart) & (ufoDf['Date'] <= yearEnd)
+    mask = (ufoDf['Date'] > dateLow) & (ufoDf['Date'] <= dateHigh)
+
+    time_series = pd.DataFrame(ufoDf.loc[yearMask]['Date'].value_counts())  # it may be worthwhile to reset the index and sort the col
+    time_series = time_series.resample('D').sum().fillna(0)
+    time_series = time_series.sort_index()
+    #time_series = time_series.reindex(pd.date_range(time_series.iloc[0], time_series.iloc[-1]), fill_value=0)
+    time_series['pytime'] = time_series.index
+    time_series.columns = ['Number of Sightings', movieDf2.iloc[indexvalue]['Movie']]
+    time_series['rolling'] = time_series['Number of Sightings'].rolling(12).mean()  # rollingmean to correct for seasonal changes
+
+    return [time_series, dateLow, dateHigh]
+
+def movieWindowPlot(dataframe):
 
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1)
-    xaxis = np.arange(-7, 8, 1)
+    labels = np.arange(-7, 8)
+    xticks = labels
+
+
+    #ax.set_xticks(dataframe[0].index)
+    #ax.set_xticks(np.arange(-7, 8))
+    #ax.set_xticklabels(labels)
+    #ax.set_xlim(dataframe[1], dataframe[2])
+
+
     ax.set_xlabel('Days Before and After Release (0 = Release Day)')
     ax.set_ylabel('Number of Sightings')
-    ax.set_title('Number of UFO Sightings During the Release of ' + str(movieDf2.iloc[indexvalue]['Movie']))
+    ax.set_title('UFO Sightings During the Release of ' + str(dataframe[0].columns.get_values()[1]))
 
-    plt.xticks(np.arange(-7, 8, 1))
-    plt.plot(xaxis, npList)
+    ax.plot(dataframe[0].index, dataframe[0]['rolling'])
+    #ax.plot(dataframe[0].index, dataframe[0]['Number of Sightings'])
 
-    print('The average number of daily sightings for the release window of ' + str(movieDf2.iloc[indexvalue]['Movie']) + ' was ' + str(npList.mean()) + ' sightings per day')
-    print('The average number of daily sightings for the year was ' + str(df2.loc[date.year].values.mean()))
+    print('The average number of daily sightings for the release window of ' + str(dataframe[0].columns.get_values()[1]) + ' was ' + str(dataframe[0]['Number of Sightings'].mean()) + ' sightings per day')
+    print('The average number of daily sightings for the year was ')
+
     plt.show()
 
-    plt.plot(df2.loc[date.year])
-    plt.show()
-    df2.loc[movieDf2.iloc[indexvalue]['Release Date'].year].unstack(fill_value=0).stack().groupby(['Month', 'Date']).sum().groupby(['Month', 'Date']).mean()
-    df2.loc[movieDf2.iloc[indexvalue]['Release Date'].year].unstack(fill_value=0).stack().groupby(
-        ['Month', 'Date']).sum()['Number of Occurances'].unstack(fill_value=0).stack()[1]
 
-
-def yearGraph():
-    mask = (ufoDf['Date'] > '1987-1-1') & (ufoDf['Date'] <= '1987-12-31')
+def yearGraph(startdate, enddate):
+    mask = (ufoDf['Date'] > startdate) & (ufoDf['Date'] <= enddate)
     time_series = pd.DataFrame(ufoDf.loc[mask]['Date'].value_counts())  # it may be worthwhile to reset the index and sort the col
-    time_series = time_series.resample('D').sum().fillna(0)
+    time_series = time_series.resample('D').sum().fillna(0) # Resample to return the missing days to the df
     time_series = time_series.sort_index()
-    time_series = time_series.reindex(pd.date_range("1987-01-01", "1987-12-31"), fill_value=0)
+    time_series = time_series.reindex(pd.date_range(startdate, enddate), fill_value=0)
+    time_series.columns = ['Number of Sightings']
+    time_series['rolling'] = time_series['Number of Sightings'].rolling(12).mean() # rollingmean to correct for seasonal changes
 
-    plt.plot(time_series.index, time_series['Date'])
+    plt.plot(time_series.index, time_series['Number of Sightings'])
+    plt.plot(time_series.index, time_series['rolling'])
     plt.show()
 
 def yearGraphSeasonal():
@@ -271,9 +285,9 @@ def yearGraphSeasonal():
     plt.savefig('figpath.png', dpi=300)
 
     plt.show()
-    #data = time_series['Date'].rolling(12).mean()
 
-def yearGraphSeasonal2(startdate, enddate):
+
+def yearGraphSeasonal2(dataframe):
     start_time = datetime.datetime.strptime(str(startdate), '%Y%m%d')
     end_time = datetime.datetime.strptime(str(enddate), '%Y%m%d')
 
