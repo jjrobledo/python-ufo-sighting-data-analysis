@@ -29,18 +29,10 @@ def shapeGraph():
         ufoShapeArray.append(i)
 
     shapeCounts = pd.DataFrame(ufoDf.Shape.value_counts())
-
-    shapeCounts = shapeCounts.drop(['EMPTY', 'HEXAGON', 'CRESCENT','PYRAMID', 'DOME']) # Remove useless values
+    shapeCounts = shapeCounts.drop(['EMPTY', 'HEXAGON', 'CRESCENT','PYRAMID', 'DOME']) # Remove values that are of little value
     shapeCounts.columns = ['Count']
-    #shapes = shapeCounts.index()
 
     ax = plt.subplots()
-
-    #ax.barh(ypos, num_reports, align='center', color='green')
-    #ax.set_yticks(ypos)
-    #ax.set_yticklabels(shapes)
-
-
 
     ax = shapeCounts.plot.barh()
     ax.set_xlabel('Number of Reports')
