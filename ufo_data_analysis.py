@@ -15,9 +15,6 @@ pd.set_option('display.expand_frame_repr', False)
 ufoDf = pd.read_csv('ufo_reports.csv')
 ufoDf.Date = pd.to_datetime(ufoDf[['Year', 'Month', 'Day']], errors='coerce')
 
-#ufoDf['Month'] = ufoDf['Month'].apply(lambda x: calendar.month_name[x])
-
-
 def shapeGraph():
     """
     Generates a bar graph with a list of shapes on the y-axis and their frequency of the x-axis.
@@ -57,7 +54,7 @@ def sightigsByYear():
 
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1)
-    ax.set_title('Number of Sightings by Year')
+    ax.set_title('Number of Sightings by Year (1974-Present')
     ax.set_xlabel('Year')
     ax.set_ylabel('Number of Sightings')
 
@@ -77,7 +74,7 @@ def sightingsByShape():
     df1 = df.groupby(['Year', 'Shape']).agg(len)  # use .loc[xxxx] to call for a specific year
     df1 = df1.drop(['Unnamed: 0', 'Date', 'Duration', 'Summary', 'Month', 'Time', 'State',
                                                   'Posted'], axis=1)
-    df1.columns = ['Number of Occurances']
+    df1.columns = ['Number of Occurances', 'Untitled']
     df1 = df1.unstack(fill_value=0)
     df1 = df1.stack()
 
