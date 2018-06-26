@@ -102,7 +102,7 @@ def annualHeatmap():
     df2 = ufoDf.groupby(['Year', 'Month', 'Date', 'Shape']).agg(len)
     df2 = df2.drop(['Duration', 'Summary', 'Time', 'State',
                                                     'City', 'Posted'], axis=1)
-    df2.columns = ['Number of Occurances']
+    df2.columns = ['Number of Occurances', 'untitled']
     df2 = df2.unstack(fill_value=0)
     df2 = df2.stack()
 
@@ -116,6 +116,34 @@ def annualHeatmap():
     ax = sns.heatmap(df3, vmin=5, vmax=16, square=True, linewidth=0.3, ax=ax, cbar_ax=cbar_ax,
                      cbar_kws={"orientation": "horizontal"})
     plt.show()
+
+
+def heatmap():
+    startTime = '1974-01-01'
+    endTime = '20180531'
+    df = ufoDf.groupby('Date')
+    df = ufoDf.groupby('Date').agg(len)
+    df = df.resample('D').sum().fillna(0)
+    df = df.drop(['Time', 'City', 'State', 'Shape', 'Duration', 'Summary', 'Posted', 'Year', 'Month', 'Day'], axis=1)
+    df = df.reset_index()
+    mask = (df.Date > startTime) & (df.Date <= endTime)
+    sightings = pd.DataFrame(df.loc[mask])
+    sightings.columns = ['Date', 'Count']
+    sightings = sightings.set_index('Date')
+    sightings['Year'] = sightings.index.year
+    sightings['Month'] = sightings.index.month
+    sightings['Day'] = sightings.index.day
+    x = sightings.groupby(['Year', 'Month', 'Day']).sum()
+    #x = x['Count']rolling(12).sum().dropna()
+    x2 = x.groupby(['Month', 'Day']).sum()
+    x3 = x2.pivot_table(index='Month', columns='Day', values='Count')
+    grid_kws = {"height_ratios": (.9, .05), "hspace": .3}
+    f, (ax, cbar_ax) = plt.subplots(2, gridspec_kw=grid_kws)
+    cbar_ax.set_title('Number of Sightings')
+    ax = sns.heatmap(x3, square=True, vmin=100, vmax=600, center=250, linewidth=0.3, ax=ax, cbar_ax=cbar_ax,
+                     cbar_kws={"orientation": "horizontal"})
+    plt.show()
+
 
 
 movieDf2 = pd.read_csv('ufo-movie-releases.csv')
