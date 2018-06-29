@@ -37,29 +37,6 @@ def shapeGraph():
     ax.set_title('Most Commonly Reported UFO Shapes')
     plt.show()
 
-def sightigsByYear():
-    """
-    Plot the frequency of UFO sightings by year
-
-    :return: line plot of ufo sightings by year
-    """
-    yearDf = ufoDf.Year.value_counts()
-    yearDf = yearDf.sort_index(ascending=False)
-    yearDf = yearDf.iloc[:-75]
-    yearDf = yearDf.reset_index()
-    yearDf.columns = ['Year', 'Number of Sightings']
-
-    plt_x = yearDf.Year
-    plt_y = yearDf['Number of Sightings']
-
-    fig = plt.figure()
-    ax = fig.add_subplot(1, 1, 1)
-    ax.set_title('Number of Sightings by Year (1974-Present')
-    ax.set_xlabel('Year')
-    ax.set_ylabel('Number of Sightings')
-
-    plt.plot(plt_x, plt_y)
-    plt.show()
 
 def sightingsByShape():
     # TODO drop empty sightings from the list
@@ -77,10 +54,12 @@ def sightingsByShape():
     df1.columns = ['Number of Occurances', 'Untitled']
     df1 = df1.unstack(fill_value=0)
     df1 = df1.stack()
+    mask = (df['Shape'] != 'DOME') & (df['Shape'] != 'CROSS') & (df['Shape'] != 'CONE') & (df['Shape'] != 'HEXAGON') & (df['Shape'] != 'PYRAMID') & (df['Shape'] != 'CRESCENT')
+    df2 = df[mask]
 
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1)
-    for shape in df.Shape.unique():
+    for shape in df2.Shape.unique():
         xAxis = df1['Number of Occurances'][:, shape][-45:].index
         yAxis = df1['Number of Occurances'][:, shape][-45:].values
         ax.set_title('Number of UFO Sightings by Shape (1974-present)')
@@ -91,6 +70,29 @@ def sightingsByShape():
     ax.set_ylabel('Number of Sightings')
     plt.show()
 
+def sightigsByYear():
+    """
+    Plot the frequency of UFO sightings by year
+
+    :return: line plot of ufo sightings by year
+    """
+    yearDf = ufoDf.Year.value_counts()
+    yearDf = yearDf.sort_index(ascending=False)
+    yearDf = yearDf.iloc[:-75]
+    yearDf = yearDf.reset_index()
+    yearDf.columns = ['Year', 'Number of Sightings']
+
+    plt_x = yearDf.Year
+    plt_y = yearDf['Number of Sightings']
+
+    fig = plt.figure()
+    ax = fig.add_subplot(1, 1, 1)
+    ax.set_title('Number of Sightings by Year (1974-Present)')
+    ax.set_xlabel('Year')
+    ax.set_ylabel('Number of Sightings')
+
+    plt.plot(plt_x, plt_y)
+    plt.show()
 
 def annualHeatmap():
     # TODO change the names on the y axis to month names
@@ -140,7 +142,7 @@ def heatmap():
     grid_kws = {"height_ratios": (.9, .05), "hspace": .3}
     f, (ax, cbar_ax) = plt.subplots(2, gridspec_kw=grid_kws)
     cbar_ax.set_title('Number of Sightings')
-    ax = sns.heatmap(x3, square=True, vmin=100, vmax=600, center=250, linewidth=0.3, ax=ax, cbar_ax=cbar_ax,
+    ax = sns.heatmap(x3, square=True, vmin=100, vmax=600, center=200, linewidths=.03, ax=ax, cbar_ax=cbar_ax,
                      cbar_kws={"orientation": "horizontal"})
     plt.show()
 
@@ -235,9 +237,10 @@ def yearGraph(startdate, enddate):
     time_series = time_series.sort_index()
     time_series = time_series.reindex(pd.date_range(startdate, enddate), fill_value=0)
     time_series.columns = ['Number of Sightings']
-    time_series['rolling'] = time_series['Number of Sightings'].rolling(12).mean() # rollingmean to correct for seasonal changes
+    time_series['rolling'] = time_series['Number of Sightings'].rolling(12).mean()
 
-    plt.plot(time_series.index, time_series['Number of Sightings'])
+
+    #plt.plot(time_series.index, time_series['Number of Sightings'])
     plt.plot(time_series.index, time_series['rolling'])
     plt.show()
 
