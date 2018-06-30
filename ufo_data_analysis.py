@@ -70,7 +70,7 @@ def sightingsByShape():
     ax.set_ylabel('Number of Sightings')
     plt.show()
 
-def sightigsByYear():
+def sightingsByYear():
     """
     Plot the frequency of UFO sightings by year
 
@@ -82,8 +82,15 @@ def sightigsByYear():
     yearDf = yearDf.reset_index()
     yearDf.columns = ['Year', 'Number of Sightings']
 
+    xfilesDf = pd.read_csv('xfiles.csv')
+    xfilesDf = xfilesDf.set_index('Air Date')
+    xfilesDf.index = pd.to_datetime(xfilesDf.index)
+
     plt_x = yearDf.Year
     plt_y = yearDf['Number of Sightings']
+
+    plt_x2 = xfilesDf.index
+    plt_y2 = xfilesDf['Viewers (millions)']
 
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1)
@@ -92,6 +99,7 @@ def sightigsByYear():
     ax.set_ylabel('Number of Sightings')
 
     plt.plot(plt_x, plt_y)
+    plt.plot(plt_x2, plt_y2 *1000)
     plt.show()
 
 def annualHeatmap():
@@ -199,7 +207,7 @@ def movieSightings(indexvalue):
     #time_series = time_series.reindex(pd.date_range(time_series.iloc[0], time_series.iloc[-1]), fill_value=0)
     time_series['pytime'] = time_series.index
     time_series.columns = ['Number of Sightings', movieDf2.iloc[indexvalue]['Movie']]
-    time_series['rolling'] = time_series['Number of Sightings'].rolling(12).mean()  # rollingmean to correct for seasonal changes
+    time_series['rolling'] = time_series['Number of Sightings'].rolling('30D').mean()  # rollingmean to correct for seasonal changes
 
     return [time_series, dateLow, dateHigh]
 
@@ -233,15 +241,30 @@ def movieWindowPlot(dataframe):
 def yearGraph(startdate, enddate):
     mask = (ufoDf['Date'] > startdate) & (ufoDf['Date'] <= enddate)
     time_series = pd.DataFrame(ufoDf.loc[mask]['Date'].value_counts())  # it may be worthwhile to reset the index and sort the col
+    time_series2 = pd.DataFrame(ufoDf.loc[mask]['Date'].value_counts())
+    time_series2 = time_series2.sort_index()
     time_series = time_series.resample('D').sum().fillna(0) # Resample to return the missing days to the df
     time_series = time_series.sort_index()
     time_series = time_series.reindex(pd.date_range(startdate, enddate), fill_value=0)
     time_series.columns = ['Number of Sightings']
-    time_series['rolling'] = time_series['Number of Sightings'].rolling(12).mean()
+    time_series['rolling'] = time_series['Number of Sightings'].rolling('180D').mean()
 
+    xfilesDf = pd.read_csv('xfiles.csv')
+    xfilesDf = xfilesDf.set_index('Air Date')
+    xfilesDf.index = pd.to_datetime(xfilesDf.index)
+    #xfilesDf = xfilesDf.resample('D').sum().fillna(0)
+    xfilesDf = xfilesDf.sort_index()
+    xfilesDf['Roll'] = xfilesDf['Viewers (millions)'].rolling('30D').mean()
+    #xfilesDf['Roll'] = xfilesDf['Roll'].rolling(12).mean()
 
-    #plt.plot(time_series.index, time_series['Number of Sightings'])
-    plt.plot(time_series.index, time_series['rolling'])
+    plt_y = time_series['rolling']#time_series2['Date'].rolling(12).mean()
+    plt_x = time_series.index
+
+    plt_x2 = xfilesDf.index
+    plt_y2 = xfilesDf['Viewers (millions)'] * .16
+
+    plt.plot(plt_x, plt_y) # ufo sightings
+    #plt.plot(plt_x2, plt_y2) # xfiles ratings
     plt.show()
 
 def yearGraphSeasonal():

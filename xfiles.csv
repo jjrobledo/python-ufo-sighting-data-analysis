@@ -1,0 +1,202 @@
+Episode,Name,Director,Writer,Air Date,Production Code,Viewers (millions)
+1,"""Pilot""",Robert Mandel,Chris Carter,1993-09-10,1X79,12
+2,"""Deep Throat""",Daniel Sackheim,Chris Carter,1993-09-17,1X01,11.1
+3,"""Squeeze""",Harry Longstreet,Glen Morgan & James Wong,1993-09-24,1X02,11.1
+4,"""Conduit""",Daniel Sackheim,Alex Gansa & Howard Gordon,1993-10-01,1X03,9.2
+5,"""The Jersey Devil""",Joe Napolitano,Chris Carter,1993-10-08,1X04,10.4
+6,"""Shadows""",Michael Katleman,Glen Morgan & James Wong,1993-10-22,1X05,8.8
+7,"""Ghost in the Machine""",Jerrold Freedman,Alex Gansa & Howard Gordon,1993-10-29,1X06,9.5
+8,"""Ice""",David Nutter,Glen Morgan & James Wong,1993-11-05,1X07,10
+9,"""Space""",William Graham,Chris Carter,1993-11-12,1X08,10.7
+10,"""Fallen Angel""",Larry Shaw,Howard Gordon & Alex Gansa,1993-11-19,1X09,8.8
+11,"""Eve""",Fred Gerber,Kenneth Biller & Chris Brancato,1993-12-10,1X10,10.4
+12,"""Fire""",Larry Shaw,Chris Carter,1993-12-17,1X11,11.1
+13,"""Beyond the Sea""",David Nutter,Glen Morgan & James Wong,1994-01-07,1X12,10.8
+14,"""Gender Bender""",Rob Bowman,Larry Barber & Paul Barber,1994-01-21,1X13,11.1
+15,"""Lazarus""",David Nutter,Alex Gansa & Howard Gordon,1994-02-04,1X14,12.1
+16,"""Young at Heart""",Michael Lange,Scott Kaufer and Chris Carter,1994-02-11,1X15,11.5
+17,"""E.B.E.""",William Graham,Glen Morgan & James Wong,1994-02-18,1X16,N/A
+18,"""Miracle Man""",Michael Lange,Chris Carter & Howard Gordon,1994-03-18,1X17,11.6
+19,"""Shapes""",David Nutter,Marilyn Osborn,1994-04-01,1X18,11.5
+20,"""Darkness Falls""",Joe Napolitano,Chris Carter,1994-04-15,1X19,12.5
+21,"""Tooms""",David Nutter,Glen Morgan & James Wong,1994-04-22,1X20,13.4
+22,"""Born Again""",Jerrold Freedman,Howard Gordon & Alex Gansa,1994-04-29,1X21,13.7
+23,"""Roland""",David Nutter,Chris Ruppenthal,1994-05-06,1X22,12.5
+24,"""The Erlenmeyer Flask""",R. W. Goodwin,Chris Carter,1994-05-13,1X23,14
+1,"""Little Green Men""",David Nutter,Glen Morgan & James Wong,1994-09-16,2X01,16.1
+2,"""The Host""",Daniel Sackheim,Chris Carter,1994-09-23,2X02,15.9
+3,"""Blood""",David Nutter,Story by : Darin Morgan Teleplay by : Glen Morgan & James Wong,1994-09-30,2X03,14.8
+4,"""Sleepless""",Rob Bowman,Howard Gordon,1994-10-07,2X04,13.4
+5,"""Duane Barry""",Chris Carter,Chris Carter,1994-10-14,2X05,13.9
+6,"""Ascension""",Michael Lange,Paul Brown,1994-10-21,2X06,15.5
+7,"""3""",David Nutter,Chris Ruppenthal and Glen Morgan & James Wong,1994-11-04,2X07,15
+8,"""One Breath""",R. W. Goodwin,Glen Morgan & James Wong,1994-11-11,2X08,15.3
+9,"""Firewalker""",David Nutter,Howard Gordon,1994-11-18,2X09,15.2
+10,"""Red Museum""",Win Phelps,Chris Carter,1994-12-09,2X10,16.1
+11,"""Excelsis Dei""",Stephen Surjik,Paul Brown,1994-12-16,2X11,14.2
+12,"""Aubrey""",Rob Bowman,Sara B. Charno,1995-01-06,2X12,16.2
+13,"""Irresistible""",David Nutter,Chris Carter,1995-01-13,2X13,14.7
+14,"""Die Hand Die Verletzt""",Kim Manners,Glen Morgan & James Wong,1995-01-27,2X14,17.7
+15,"""Fresh Bones""",Rob Bowman,Howard Gordon,1995-02-03,2X15,17.8
+16,"""Colony""",Nick Marck,Story by : David Duchovny & Chris Carter Teleplay by : Chris Carter,1995-02-10,2X16,15.9
+17,"""End Game""",Rob Bowman,Frank Spotnitz,1995-02-17,2X17,17.5
+18,"""Fearful Symmetry""","James Whitmore, Jr.",Steve De Jarnatt,1995-02-24,2X18,16.5
+19,"""Død Kalm""",Rob Bowman,Story by : Howard Gordon Teleplay by : Howard Gordon & Alex Gansa,1995-03-10,2X19,17.1
+20,"""Humbug""",Kim Manners,Darin Morgan,1995-03-31,2X20,15.7
+21,"""The Calusari""",Michael Vejar,Sara B. Charno,1995-04-14,2X21,12.9
+22,"""F. Emasculata""",Rob Bowman,Chris Carter & Howard Gordon,1995-04-28,2X22,14
+23,"""Soft Light""",James Contner,Vince Gilligan,1995-05-05,2X23,12.9
+24,"""Our Town""",Rob Bowman,Frank Spotnitz,1995-05-12,2X24,14.5
+25,"""Anasazi""",R. W. Goodwin,Story by : David Duchovny & Chris Carter Teleplay by : Chris Carter,1995-05-19,2X25,16.6
+1,"""The Blessing Way""",R. W. Goodwin,Chris Carter,1995-09-22,3X01,19.94
+2,"""Paper Clip""",Rob Bowman,Chris Carter,1995-09-29,3X02,17.2
+3,"""D.P.O.""",Kim Manners,Howard Gordon,1995-10-06,3X03,15.57
+4,"""Clyde Bruckman's Final Repose""",David Nutter,Darin Morgan,1995-10-13,3X04,15.38
+5,"""The List""",Chris Carter,Chris Carter,1995-10-20,3X05,16.72
+6,"""2Shy""",David Nutter,Jeffrey Vlaming,1995-11-03,3X06,14.83
+7,"""The Walk""",Rob Bowman,John Shiban,1995-11-10,3X07,15.91
+8,"""Oubliette""",Kim Manners,Charles Grant Craig,1995-11-17,3X08,15.9
+9,"""Nisei""",David Nutter,Chris Carter & Howard Gordon & Frank Spotnitz,1995-11-24,3X09,16.36
+10,"""731""",Rob Bowman,Frank Spotnitz,1995-12-01,3X10,17.68
+11,"""Revelations""",David Nutter,Kim Newton,1995-12-15,3X11,15.25
+12,"""War of the Coprophages""",Kim Manners,Darin Morgan,1996-01-05,3X12,16.32
+13,"""Syzygy""",Rob Bowman,Chris Carter,1996-01-26,3X13,16.04
+14,"""Grotesque""",Kim Manners,Howard Gordon,1996-02-02,3X14,18.32
+15,"""Piper Maru""",Rob Bowman,Frank Spotnitz & Chris Carter,1996-02-09,3X15,16.44
+16,"""Apocrypha""",Kim Manners,Frank Spotnitz & Chris Carter,1996-02-16,3X16,16.71
+17,"""Pusher""",Rob Bowman,Vince Gilligan,1996-02-23,3X17,16.2
+18,"""Teso Dos Bichos""",Kim Manners,John Shiban,1996-03-08,3X18,17.38
+19,"""Hell Money""",Tucker Gates,Jeffrey Vlaming,1996-03-29,3X19,14.86
+20,"""Jose Chung's From Outer Space""",Rob Bowman,Darin Morgan,1996-04-12,3X20,16.08
+21,"""Avatar""",James Charleston,Story by : David Duchovny & Howard Gordon Teleplay by : Howard Gordon,1996-04-26,3X21,14.62
+22,"""Quagmire""",Kim Manners,Kim Newton,1996-05-03,3X22,16
+23,"""Wetwired""",Rob Bowman,Mat Beck,1996-05-10,3X23,14.48
+24,"""Talitha Cumi""",R. W. Goodwin,Story by : David Duchovny & Chris Carter Teleplay by : Chris Carter,1996-05-17,3X24,17.86
+1,"""Herrenvolk""",R. W. Goodwin,Chris Carter,1996-10-04,4X01,21.11
+2,"""Home""",Kim Manners,Glen Morgan & James Wong,1996-10-11,4X03,18.85
+3,"""Teliko""",James Charleston,Howard Gordon,1996-10-18,4X04,18.01
+4,"""Unruhe""",Rob Bowman,Vince Gilligan,1996-10-27,4X02,19.1
+5,"""The Field Where I Died""",Rob Bowman,Glen Morgan & James Wong,1996-11-03,4X05,19.85
+6,"""Sanguinarium""",Kim Manners,Valerie Mayhew & Vivian Mayhew,1996-11-10,4X06,18.85
+7,"""Musings of a Cigarette Smoking Man""",James Wong,Glen Morgan,1996-11-17,4X07,17.09
+8,"""Tunguska""",Kim Manners,Frank Spotnitz & Chris Carter,1996-11-24,4X09,18.85
+9,"""Terma""",Rob Bowman,Frank Spotnitz & Chris Carter,1996-12-01,4X10,17.34
+10,"""Paper Hearts""",Rob Bowman,Vince Gilligan,1996-12-15,4X08,16.59
+11,"""El Mundo Gira""",Tucker Gates,John Shiban,1997-01-12,4X11,22.37
+12,"""Leonard Betts""",Kim Manners,Vince Gilligan & John Shiban & Frank Spotnitz,1997-01-26,4X14,29.15
+13,"""Never Again""",Rob Bowman,Glen Morgan & James Wong,1997-02-02,4X13,21.36
+14,"""Memento Mori""",Rob Bowman,Chris Carter & Vince Gilligan & John Shiban & Frank Spotnitz,1997-02-09,4X15,19.1
+15,"""Kaddish""",Kim Manners,Howard Gordon,1997-02-16,4X12,16.56
+16,"""Unrequited""",Michael Lange,Story by : Howard Gordon Teleplay by : Howard Gordon & Chris Carter,1997-02-23,4X16,16.56
+17,"""Tempus Fugit""",Rob Bowman,Chris Carter & Frank Spotnitz,1997-03-16,4X17,18.85
+18,"""Max""",Kim Manners,Chris Carter & Frank Spotnitz,1997-03-23,4X18,18.34
+19,"""Synchrony""",James Charleston,Howard Gordon & David Greenwalt,1997-04-13,4X19,18.09
+20,"""Small Potatoes""",Cliff Bole,Vince Gilligan,1997-04-20,4X20,20.86
+21,"""Zero Sum""",Kim Manners,Howard Gordon & Frank Spotnitz,1997-04-27,4X21,18.6
+22,"""Elegy""",James Charleston,John Shiban,1997-05-04,4X22,17.1
+23,"""Demons""",Kim Manners,R. W. Goodwin,1997-05-11,4X23,19.1
+24,"""Gethsemane""",R. W. Goodwin,Chris Carter,1997-05-18,4X24,19.85
+1,"""Redux""",R. W. Goodwin,Chris Carter,1997-11-02,5X02,27.34
+2,"""Redux II""",Kim Manners,Chris Carter,1997-11-09,5X03,24.84
+3,"""Unusual Suspects""",Kim Manners,Vince Gilligan,1997-11-16,5X01,21.72
+4,"""Detour""",Brett Dowler,Frank Spotnitz,1997-11-23,5X04,22.88
+5,"""The Post-Modern Prometheus""",Chris Carter,Chris Carter,1997-11-30,5X06,18.68
+6,"""Christmas Carol""",Peter Markle,Vince Gilligan & John Shiban & Frank Spotnitz,1997-12-07,5X05,20.91
+7,"""Emily""",Kim Manners,Vince Gilligan & John Shiban & Frank Spotnitz,1997-12-14,5X07,20.94
+8,"""Kitsunegari""",Daniel Sackheim,Vince Gilligan & Tim Minear,1998-01-04,5X08,19.75
+9,"""Schizogeny""",Ralph Hemecker,Jessica Scott & Mike Wollaeger,1998-01-11,5X09,21.37
+10,"""Chinga""",Kim Manners,Stephen King & Chris Carter,1998-02-08,5X10,21.33
+11,"""Kill Switch""",Rob Bowman,William Gibson & Tom Maddox,1998-02-15,5X11,18.04
+12,"""Bad Blood""",Cliff Bole,Vince Gilligan,1998-02-22,5X12,19.25
+13,"""Patient X""",Kim Manners,Chris Carter & Frank Spotnitz,1998-03-01,5X13,20.21
+14,"""The Red and the Black""",Chris Carter,Chris Carter & Frank Spotnitz,1998-03-08,5X14,19.98
+15,"""Travelers""",William A. Graham,John Shiban & Frank Spotnitz,1998-03-29,5X15,15.06
+16,"""Mind's Eye""",Kim Manners,Tim Minear,1998-04-19,5X16,16.53
+17,"""All Souls""",Allen Coulter,Story by : Billy Brown & Dan Angel Teleplay by : Frank Spotnitz & John Shiban,1998-04-26,5X17,13.44
+18,"""The Pine Bluff Variant""",Rob Bowman,John Shiban,1998-05-03,5X18,18.24
+19,"""Folie à Deux""",Kim Manners,Vince Gilligan,1998-05-10,5X19,17.63
+20,"""The End""",R. W. Goodwin,Chris Carter,1998-05-17,5X20,18.76
+1,"""The Beginning""",Kim Manners,Chris Carter,1998-11-08,6ABX01,20.34
+2,"""Drive""",Rob Bowman,Vince Gilligan,1998-11-15,6ABX02,18.5
+3,"""Triangle""",Chris Carter,Chris Carter,1998-11-22,6ABX03,18.2
+4,"""Dreamland""",Kim Manners,Vince Gilligan & John Shiban & Frank Spotnitz,1998-11-29,6ABX04,17.48
+5,"""Dreamland II""",Michael Watkins,Vince Gilligan & John Shiban & Frank Spotnitz,1998-12-06,6ABX05,17.01
+6,"""How the Ghosts Stole Christmas""",Chris Carter,Chris Carter,1998-12-13,6ABX08,17.31
+7,"""Terms of Endearment""",Rob Bowman,David Amann,1999-01-03,6ABX06,18.69
+8,"""The Rain King""",Kim Manners,Jeffrey Bell,1999-01-10,6ABX07,21.24
+9,"""S.R. 819""",Daniel Sackheim,John Shiban,1999-01-17,6ABX10,15.65
+10,"""Tithonus""",Michael Watkins,Vince Gilligan,1999-01-24,6ABX09,15.83
+11,"""Two Fathers""",Kim Manners,Chris Carter & Frank Spotnitz,1999-02-07,6ABX11,18.81
+12,"""One Son""",Rob Bowman,Chris Carter & Frank Spotnitz,1999-02-14,6ABX12,16.57
+13,"""Agua Mala""",Rob Bowman,David Amann,1999-02-21,6ABX14,16.91
+14,"""Monday""",Kim Manners,Vince Gilligan & John Shiban,1999-02-28,6ABX15,16.74
+15,"""Arcadia""",Michael Watkins,Daniel Arkin,1999-03-07,6ABX13,17.91
+16,"""Alpha""",Peter Markle,Jeffrey Bell,1999-03-28,6ABX16,17.67
+17,"""Trevor""",Rob Bowman,Jim Guttridge & Ken Hawryliw,1999-04-11,6ABX17,17.65
+18,"""Milagro""",Kim Manners,Story by : John Shiban & Frank Spotnitz Teleplay by : Chris Carter,1999-04-18,6ABX18,15.2
+19,"""The Unnatural""",David Duchovny,David Duchovny,1999-04-25,6ABX20,16.88
+20,"""Three of a Kind""",Bryan Spicer,Vince Gilligan & John Shiban,1999-05-02,6ABX19,12.94
+21,"""Field Trip""",Kim Manners,Story by : Frank Spotnitz Teleplay by : John Shiban & Vince Gilligan,1999-05-09,6ABX21,15.38
+22,"""Biogenesis""",Rob Bowman,Chris Carter & Frank Spotnitz,1999-05-16,6ABX22,15.86
+1,"""The Sixth Extinction""",Kim Manners,Chris Carter,1999-11-07,7ABX03,17.82
+2,"""The Sixth Extinction II: Amor Fati""",Michael Watkins,David Duchovny & Chris Carter,1999-11-14,7ABX04,16.15
+3,"""Hungry""",Kim Manners,Vince Gilligan,1999-11-21,7ABX01,16.17
+4,"""Millennium""",Thomas J. Wright,Vince Gilligan & Frank Spotnitz,1999-11-28,7ABX05,15.09
+5,"""Rush""",Robert Lieberman,David Amann,1999-12-05,7ABX06,12.71
+6,"""The Goldberg Variation""",Thomas J. Wright,Jeffrey Bell,1999-12-12,7ABX02,14.49
+7,"""Orison""",Rob Bowman,Chip Johannessen,2000-01-09,7ABX07,15.63
+8,"""The Amazing Maleeni""",Thomas J. Wright,Vince Gilligan & John Shiban & Frank Spotnitz,2000-01-16,7ABX08,16.18
+9,"""Signs and Wonders""",Kim Manners,Jeffrey Bell,2000-01-23,7ABX09,13.86
+10,"""Sein und Zeit""",Michael Watkins,Chris Carter & Frank Spotnitz,2000-02-06,7ABX10,13.95
+11,"""Closure""",Kim Manners,Chris Carter & Frank Spotnitz,2000-02-13,7ABX11,15.35
+12,"""X-Cops""",Michael Watkins,Vince Gilligan,2000-02-20,7ABX12,16.56
+13,"""First Person Shooter""",Chris Carter,William Gibson & Tom Maddox,2000-02-27,7ABX13,15.31
+14,"""Theef""",Kim Manners,Vince Gilligan & John Shiban & Frank Spotnitz,2000-03-12,7ABX14,11.91
+15,"""En Ami""",Rob Bowman,William B. Davis,2000-03-19,7ABX15,11.99
+16,"""Chimera""",Cliff Bole,David Amann,2000-04-02,7ABX16,12.89
+17,"""all things""",Gillian Anderson,Gillian Anderson,2000-04-09,7ABX17,12.18
+18,"""Brand X""",Kim Manners,Steven Maeda & Greg Walker,2000-04-16,7ABX19,10.81
+19,"""Hollywood A.D.""",David Duchovny,David Duchovny,2000-04-30,7ABX18,12.88
+20,"""Fight Club""",Paul Shapiro,Chris Carter,2000-05-07,7ABX20,11.7
+21,"""Je Souhaite""",Vince Gilligan,Vince Gilligan,2000-05-14,7ABX21,12.79
+22,"""Requiem""",Kim Manners,Chris Carter,2000-05-21,7ABX22,15.26
+1,"""Within""",Kim Manners,Chris Carter,2000-11-05,8ABX01,15.87
+2,"""Without""",Kim Manners,Chris Carter,2000-11-12,8ABX02,15.1
+3,"""Patience""",Chris Carter,Chris Carter,2000-11-19,8ABX04,13.3
+4,"""Roadrunners""",Rod Hardy,Vince Gilligan,2000-11-26,8ABX05,13.6
+5,"""Invocation""",Richard Compton,David Amann,2000-12-03,8ABX06,13.9
+6,"""Redrum""",Peter Markle,Story by : Steven Maeda & Daniel Arkin Teleplay by : Steven Maeda,2000-12-10,8ABX03,13.2
+7,"""Via Negativa""",Tony Wharmby,Frank Spotnitz,2000-12-17,8ABX07,12.37
+8,"""Surekill""",Terrence O'Hara,Greg Walker,2001-01-07,8ABX09,13.3
+9,"""Salvage""",Rod Hardy,Jeffrey Bell,2001-01-14,8ABX10,11.7
+10,"""Badlaa""",Tony Wharmby,John Shiban,2001-01-21,8ABX12,11.8
+11,"""The Gift""",Kim Manners,Frank Spotnitz,2001-02-04,8ABX11,14.6
+12,"""Medusa""",Richard Compton,Frank Spotnitz,2001-02-11,8ABX13,13.8
+13,"""Per Manum""",Kim Manners,Chris Carter & Frank Spotnitz,2001-02-18,8ABX08,16
+14,"""This Is Not Happening""",Kim Manners,Chris Carter & Frank Spotnitz,2001-02-25,8ABX14,16.9
+15,"""Deadalive""",Tony Wharmby,Chris Carter & Frank Spotnitz,2001-04-01,8ABX15,12.4
+16,"""Three Words""",Tony Wharmby,Chris Carter & Frank Spotnitz,2001-04-08,8ABX18,N/A
+17,"""Empedocles""",Barry K. Thomas,Greg Walker,2001-04-22,8ABX17,12.46
+18,"""Vienen""",Rod Hardy,Steven Maeda,2001-04-29,8ABX16,11.8
+19,"""Alone""",Frank Spotnitz,Frank Spotnitz,2001-05-06,8ABX19,12.7
+20,"""Essence""",Kim Manners,Chris Carter,2001-05-13,8ABX20,12.8
+21,"""Existence""",Kim Manners,Chris Carter,2001-05-20,8ABX21,14
+1,"""Nothing Important Happened Today""",Kim Manners,Chris Carter & Frank Spotnitz,2001-11-11,9ABX01,10.6
+2,"""Nothing Important Happened Today II""",Tony Wharmby,Chris Carter & Frank Spotnitz,2001-11-18,9ABX02,9.4
+3,"""Dæmonicus""",Frank Spotnitz,Frank Spotnitz,2001-12-02,9ABX03,8.7
+4,"""4-D""",Tony Wharmby,Steven Maeda,2001-12-09,9ABX05,8.9
+5,"""Lord of the Flies""",Kim Manners,Thomas Schnauz,2001-12-16,9ABX06,9.9
+6,"""Trust No 1""",Tony Wharmby,Chris Carter & Frank Spotnitz,2002-01-06,9ABX08,8.4
+7,"""John Doe""",Michelle MacLaren,Vince Gilligan,2002-01-13,9ABX07,8.7
+8,"""Hellbound""",Kim Manners,David Amann,2002-01-27,9ABX04,7.8
+9,"""Provenance""",Kim Manners,Chris Carter & Frank Spotnitz,2002-03-03,9ABX10,9.7
+10,"""Providence""",Chris Carter,Chris Carter & Frank Spotnitz,2002-03-10,9ABX11,8.4
+11,"""Audrey Pauley""",Kim Manners,Steven Maeda,2002-03-17,9ABX13,8
+12,"""Underneath""",John Shiban,John Shiban,2002-03-31,9ABX09,7.3
+13,"""Improbable""",Chris Carter,Chris Carter,2002-04-07,9ABX14,9.1
+14,"""Scary Monsters""",Dwight Little,Thomas Schnauz,2002-04-14,9ABX12,8.2
+15,"""Jump the Shark""",Cliff Bole,Vince Gilligan & John Shiban & Frank Spotnitz,2002-04-21,9ABX15,8.6
+16,"""William""",David Duchovny,Story by : David Duchovny & Frank Spotnitz & Chris Carter Teleplay by : Chris Carter,2002-04-28,9ABX17,9.3
+17,"""Release""",Kim Manners,Story by : John Shiban & David Amann Teleplay by : David Amann,2002-05-05,9ABX16,7.8
+18,"""Sunshine Days""",Vince Gilligan,Vince Gilligan,2002-05-12,9ABX18,10.4
+19  20,"""The Truth""",Kim Manners,Chris Carter,2002-05-19,9ABX19  9ABX20,13.25
