@@ -1,11 +1,15 @@
 import pandas as pd
-import matplotlib.pyplot as plt
-from matplotlib import dates
+
 import numpy as np
 import seaborn as sns
+
+import datetime as datetime
+
+
 from datetime import timedelta
 from datetime import datetime
-import datetime as datetime
+import matplotlib.pyplot as plt
+
 
 # TODO Combine shapeSightingsYear and shapeSightingsMonth by adding shapes to shapeSightingsMonth.
 # TODO move lines 14-16 to dataframe_cleaner.py
@@ -156,6 +160,7 @@ def heatmap():
 
 
 
+
 movieDf2 = pd.read_csv('ufo-movie-releases.csv')
 movieDf2 = movieDf2.drop(['Unnamed: 0', 'Unnamed: 0.1.1'], axis=1)
 movieDf2["Release Date"] = pd.to_datetime(movieDf2['Release Date']) # Change the dtpye of the release date col to type datetime
@@ -169,9 +174,11 @@ def getDateRange(movieReleaseDate):
     :param movieReleaseDate:
     :return: list of datetime objects
     '''
+
+    release = movieReleaseDate
     day_list = []
-    dateHigh = movieReleaseDate + timedelta(days=8)
-    dateLow = movieReleaseDate - timedelta(days=7)
+    dateHigh = movieReleaseDate + timedelta(days=16)
+    dateLow = movieReleaseDate - timedelta(days=14)
     delta = dateHigh - dateLow
     for i in range(delta.days):
         day_list.append(dateLow + timedelta(i))
@@ -179,7 +186,7 @@ def getDateRange(movieReleaseDate):
 
 
 
-    return day_list
+    return day_list, release
 
 def movieSightings(indexvalue):
     '''
@@ -191,12 +198,12 @@ def movieSightings(indexvalue):
     '''
 
     date = movieDf2['Release Date'][indexvalue]
-
     releaseWindow = getDateRange(date)
-    dateLow = releaseWindow[0]
-    dateHigh = releaseWindow[-1]
-    yearStart = datetime.datetime.strptime(str(dateLow.year) + '0101', '%Y%m%d').date()
-    yearEnd = datetime.datetime.strptime(str(dateHigh.year + 1) + '0101', '%Y%m%d').date()
+    dateLow = releaseWindow[0][0]
+    dateHigh = releaseWindow[0][-1]
+    release = releaseWindow[1]
+    yearStart = datetime.strptime(str(dateLow.year) + '0101', '%Y%m%d').date()
+    yearEnd = datetime.strptime(str(dateHigh.year + 1) + '0101', '%Y%m%d').date()
 
     yearMask = (ufoDf['Date'] > yearStart) & (ufoDf['Date'] <= yearEnd)
     mask = (ufoDf['Date'] > dateLow) & (ufoDf['Date'] <= dateHigh)
@@ -209,30 +216,53 @@ def movieSightings(indexvalue):
     time_series.columns = ['Number of Sightings', movieDf2.iloc[indexvalue]['Movie']]
     time_series['rolling'] = time_series['Number of Sightings'].rolling('30D').mean()  # rollingmean to correct for seasonal changes
 
-    return [time_series, dateLow, dateHigh]
+    return [time_series, dateLow, dateHigh, release, releaseWindow[0]]
 
 def movieWindowPlot(dataframe):
 
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1)
-    labels = np.arange(-7, 8)
-    xticks = labels
+    releaseDate = dataframe[3]
 
 
-    #ax.set_xticks(dataframe[0].index)
-    #ax.set_xticks(np.arange(-7, 8))
-    #ax.set_xticklabels(labels)
-    #ax.set_xlim(dataframe[1], dataframe[2])
+    ax.set_xlim(dataframe[4][0], dataframe[4][-1])
 
+    xaxis = [datetime.strftime(i, '%b %d') for i in dataframe[4]]
 
-    ax.set_xlabel('Days Before and After Release (0 = Release Day)')
+    ax.set_xlabel('Days Before and After Release (release day =' + ' ' + str(releaseDate.strftime("%B %d")) + ')')
     ax.set_ylabel('Number of Sightings')
     ax.set_title('UFO Sightings During the Release of ' + str(dataframe[0].columns.get_values()[1]))
+    ax.set_xticks(dataframe[4])
+    ax.set_xticklabels(xaxis)
+
+    count = 0
+    for i in dataframe[4]:
+        if i.weekday() == 5:
+             ax.get_xticklabels()[count].set_color("black")
+
+        elif i.weekday() == 6:
+            ax.get_xticklabels()[count].set_color("black")
+
+        else:
+             ax.get_xticklabels()[count].set_color("dimgray")
+
+        count += 1
+
+    ax.get_xticklabels()[14].set_color("red")
+    plt.xticks(rotation=70)
+
+
 
     ax.plot(dataframe[0].index, dataframe[0]['rolling'])
-    #ax.plot(dataframe[0].index, dataframe[0]['Number of Sightings'])
+
+    '''
+    red = mpatches.Patch(color='red', label='Release Date')
+    black = mpatches.Patch(color='black', label='Weekend')
+    plt.legend(handles=[red, black])
+    '''
 
     print('The average number of daily sightings for the release window of ' + str(dataframe[0].columns.get_values()[1]) + ' was ' + str(dataframe[0]['Number of Sightings'].mean()) + ' sightings per day')
+    print(dataframe[0]['Number of Sightings'].std(), dataframe[0]['Number of Sightings'].median())
     print('The average number of daily sightings for the year was ')
 
     plt.show()
