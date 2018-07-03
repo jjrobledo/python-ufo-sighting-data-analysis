@@ -1,60 +1,52 @@
-import pandas as pd
-
-import numpy as np
-import seaborn as sns
-
-import datetime as datetime
-
-
-from datetime import timedelta
-from datetime import datetime
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import seaborn as sns
+#import datetime as datetime
+from datetime import datetime
+from datetime import timedelta
+#from matplotlib import dates
 
-
-# TODO Combine shapeSightingsYear and shapeSightingsMonth by adding shapes to shapeSightingsMonth.
-# TODO move lines 14-16 to dataframe_cleaner.py
 
 pd.set_option('display.expand_frame_repr', False)
 
-ufoDf = pd.read_csv('ufo_reports.csv')
-ufoDf.Date = pd.to_datetime(ufoDf[['Year', 'Month', 'Day']], errors='coerce')
 
-def shapeGraph():
+ufo_df = pd.read_csv('ufo_reports.csv')
+ufo_df.Date = pd.to_datetime(ufo_df[['Year', 'Month', 'Day']], errors='coerce')
+
+
+def shape_graph():
     """
     Generates a bar graph with a list of shapes on the y-axis and their frequency of the x-axis.
 
-    :return: graph
+    :return: bar graph plot
     """
-    ufoShapeArray = []
-    for i in ufoDf.Shape.str.upper().unique():
-        ufoShapeArray.append(i)
+    ufo_shape_array = []
+    for i in ufo_df.Shape.str.upper().unique():
+        ufo_shape_array.append(i)
 
-    shapeCounts = pd.DataFrame(ufoDf.Shape.value_counts())
-    shapeCounts = shapeCounts.drop(['EMPTY', 'HEXAGON', 'CRESCENT','PYRAMID', 'DOME']) # Remove values that are of little value
-    shapeCounts.columns = ['Count']
+    shape_counts = pd.DataFrame(ufo_df.Shape.value_counts())
+    shape_counts = shape_counts.drop(['EMPTY', 'HEXAGON', 'CRESCENT', 'PYRAMID', 'DOME'])  # Remove values that are of little value
+    shape_counts.columns = ['Count']
 
     ax = plt.subplots()
 
-    ax = shapeCounts.plot.barh()
+    ax = shape_counts.plot.barh()
     ax.set_xlabel('Number of Reports')
     ax.set_ylabel('Shape of Reported UFO')
     ax.set_title('Most Commonly Reported UFO Shapes')
     plt.show()
 
 
-def sightingsByShape():
-    # TODO drop empty sightings from the list
-    # TODO consolidate some of tha shapes that are obviously the same triangle/triangular
+def sightings_by_shape():
     """
-    This function will show how the frequency of ufo sightings has changed of time as a
-    function of its shape.
+    This function will show how the frequency UFO sightings by shape has changed over time.
 
-    :return:
+    :return: line plot
     """
-    df = ufoDf[~ufoDf['Shape'].isin(['EMPTY'])]
+    df = ufo_df[~ufo_df['Shape'].isin(['EMPTY'])]
     df1 = df.groupby(['Year', 'Shape']).agg(len)  # use .loc[xxxx] to call for a specific year
-    df1 = df1.drop(['Unnamed: 0', 'Date', 'Duration', 'Summary', 'Month', 'Time', 'State',
-                                                  'Posted'], axis=1)
+    df1 = df1.drop(['Unnamed: 0', 'Date', 'Duration', 'Summary', 'Month', 'Time', 'State', 'Posted'], axis=1)
     df1.columns = ['Number of Occurances', 'Untitled']
     df1 = df1.unstack(fill_value=0)
     df1 = df1.stack()
@@ -64,83 +56,26 @@ def sightingsByShape():
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1)
     for shape in df2.Shape.unique():
-        xAxis = df1['Number of Occurances'][:, shape][-45:].index
-        yAxis = df1['Number of Occurances'][:, shape][-45:].values
+        x_axis = df1['Number of Occurances'][:, shape][-45:].index
+        y_axis = df1['Number of Occurances'][:, shape][-45:].values
         ax.set_title('Number of UFO Sightings by Shape (1974-present)')
         ax.set_xticks(np.arange(1974, 2019, 4))
-        plt.plot(xAxis, yAxis, label=shape)
+        plt.plot(x_axis, y_axis, label=shape)
     ax.legend(loc=2, fontsize='x-small')
     ax.set_xlabel('Year')
     ax.set_ylabel('Number of Sightings')
     plt.show()
 
-def sightingsByYear():
-    """
-    Plot the frequency of UFO sightings by year
-
-    :return: line plot of ufo sightings by year
-    """
-    yearDf = ufoDf.Year.value_counts()
-    yearDf = yearDf.sort_index(ascending=False)
-    yearDf = yearDf.iloc[:-75]
-    yearDf = yearDf.reset_index()
-    yearDf.columns = ['Year', 'Number of Sightings']
-
-    xfilesDf = pd.read_csv('xfiles.csv')
-    xfilesDf = xfilesDf.set_index('Air Date')
-    xfilesDf.index = pd.to_datetime(xfilesDf.index)
-
-    plt_x = yearDf.Year
-    plt_y = yearDf['Number of Sightings']
-
-    plt_x2 = xfilesDf.index
-    plt_y2 = xfilesDf['Viewers (millions)']
-
-    fig = plt.figure()
-    ax = fig.add_subplot(1, 1, 1)
-    ax.set_title('Number of Sightings by Year (1974-Present)')
-    ax.set_xlabel('Year')
-    ax.set_ylabel('Number of Sightings')
-
-    plt.plot(plt_x, plt_y)
-    plt.plot(plt_x2, plt_y2 *1000)
-    plt.show()
-
-def annualHeatmap():
-    # TODO change the names on the y axis to month names
-    """
-    plots a heatmap using seaborn
-
-    :return: plot
-    """
-    df2 = ufoDf.groupby(['Year', 'Month', 'Date', 'Shape']).agg(len)
-    df2 = df2.drop(['Duration', 'Summary', 'Time', 'State',
-                                                    'City', 'Posted'], axis=1)
-    df2.columns = ['Number of Occurances', 'untitled']
-    df2 = df2.unstack(fill_value=0)
-    df2 = df2.stack()
-
-    df3 = df2.groupby(['Year', 'Month', 'Date']).sum()
-    df3 = df3.groupby(['Month', 'Date']).mean()
-    df3 = df3.reset_index()
-    df3 = df3.pivot('Month', 'Date', 'Number of Occurances')
-    grid_kws = {"height_ratios": (.9, .05), "hspace": .3}
-    f, (ax, cbar_ax) = plt.subplots(2, gridspec_kw=grid_kws)
-    cbar_ax.set_title('Number of Sightings')
-    ax = sns.heatmap(df3, vmin=5, vmax=16, square=True, linewidth=0.3, ax=ax, cbar_ax=cbar_ax,
-                     cbar_kws={"orientation": "horizontal"})
-    plt.show()
-
 
 def heatmap():
-    startTime = '1974-01-01'
-    endTime = '20180531'
-    df = ufoDf.groupby('Date')
-    df = ufoDf.groupby('Date').agg(len)
+    start_time = '1974-01-01'
+    end_time = '20180531'
+    df = ufo_df.groupby('Date')
+    df = ufo_df.groupby('Date').agg(len)
     df = df.resample('D').sum().fillna(0)
     df = df.drop(['Time', 'City', 'State', 'Shape', 'Duration', 'Summary', 'Posted', 'Year', 'Month', 'Day'], axis=1)
     df = df.reset_index()
-    mask = (df.Date > startTime) & (df.Date <= endTime)
+    mask = (df.Date > start_time) & (df.Date <= end_time)
     sightings = pd.DataFrame(df.loc[mask])
     sightings.columns = ['Date', 'Count']
     sightings = sightings.set_index('Date')
@@ -148,7 +83,7 @@ def heatmap():
     sightings['Month'] = sightings.index.month
     sightings['Day'] = sightings.index.day
     x = sightings.groupby(['Year', 'Month', 'Day']).sum()
-    #x = x['Count']rolling(12).sum().dropna()
+#   x = x['Count']rolling(12).sum().dropna()
     x2 = x.groupby(['Month', 'Day']).sum()
     x3 = x2.pivot_table(index='Month', columns='Day', values='Count')
     grid_kws = {"height_ratios": (.9, .05), "hspace": .3}
@@ -159,77 +94,81 @@ def heatmap():
     plt.show()
 
 
+movie_df2 = pd.read_csv('ufo-movie-releases.csv')
+movie_df2 = movie_df2.drop(['Unnamed: 0', 'Unnamed: 0.1.1'], axis=1)
+movie_df2["Release Date"] = pd.to_datetime(movie_df2['Release Date']) # Change the dtpye of the release date col to type datetime
 
 
-movieDf2 = pd.read_csv('ufo-movie-releases.csv')
-movieDf2 = movieDf2.drop(['Unnamed: 0', 'Unnamed: 0.1.1'], axis=1)
-movieDf2["Release Date"] = pd.to_datetime(movieDf2['Release Date']) # Change the dtpye of the release date col to type datetime
-
-def getDateRange(movieReleaseDate):
+def get_date_range(movie_release_date):
     '''
-    This function should probably go above the movieSightings function
-    This function will take a datetime object and return a range of days - 10 before and after the datetime entered.
-
-
-    :param movieReleaseDate:
+    This function will take a datetime object from movie_sightings() and return a range of days before and after
+     the datetime.
+    :param movie_release_date:
     :return: list of datetime objects
     '''
 
-    release = movieReleaseDate
+    release = movie_release_date
     day_list = []
-    dateHigh = movieReleaseDate + timedelta(days=16)
-    dateLow = movieReleaseDate - timedelta(days=14)
-    delta = dateHigh - dateLow
+    date_high = movie_release_date + timedelta(days=16)
+    date_low = movie_release_date - timedelta(days=14)
+    delta = date_high - date_low
     for i in range(delta.days):
-        day_list.append(dateLow + timedelta(i))
-
-
-
+        day_list.append(date_low + timedelta(i))
 
     return day_list, release
 
-def movieSightings(indexvalue):
+
+def movie_sightings(index_value):
     '''
-    This function will take an index value from movieDf2 and calculate a 15 day release window
+    This function will take an index value from movie_df2 and calculate a release window
     for the movie.
-    :param indexvalue: int
+    :param index_value: int
     :return: Dataframe containing a time series of datetime objects
 
     '''
 
-    date = movieDf2['Release Date'][indexvalue]
-    releaseWindow = getDateRange(date)
-    dateLow = releaseWindow[0][0]
-    dateHigh = releaseWindow[0][-1]
-    release = releaseWindow[1]
-    yearStart = datetime.strptime(str(dateLow.year) + '0101', '%Y%m%d').date()
-    yearEnd = datetime.strptime(str(dateHigh.year + 1) + '0101', '%Y%m%d').date()
+    date = movie_df2['Release Date'][index_value]
+    release_window = get_date_range(date)
+    date_low = release_window[0][0]
+    date_high = release_window[0][-1]
+    release = release_window[1]
+    year_start = datetime.strptime(str(date_low.year) + '0101', '%Y%m%d').date()
+    year_end = datetime.strptime(str(date_high.year + 1) + '0101', '%Y%m%d').date()
 
-    yearMask = (ufoDf['Date'] > yearStart) & (ufoDf['Date'] <= yearEnd)
-    mask = (ufoDf['Date'] > dateLow) & (ufoDf['Date'] <= dateHigh)
+    year_mask = (ufo_df['Date'] > year_start) & (ufo_df['Date'] <= year_end)
+    # mask = (ufo_df['Date'] > date_low) & (ufo_df['Date'] <= date_high)
 
-    time_series = pd.DataFrame(ufoDf.loc[yearMask]['Date'].value_counts())  # it may be worthwhile to reset the index and sort the col
+    time_series = pd.DataFrame(ufo_df.loc[year_mask]['Date'].value_counts())  # it may be worthwhile to reset the index and sort the col
     time_series = time_series.resample('D').sum().fillna(0)
     time_series = time_series.sort_index()
-    #time_series = time_series.reindex(pd.date_range(time_series.iloc[0], time_series.iloc[-1]), fill_value=0)
+    # time_series = time_series.reindex(pd.date_range(time_series.iloc[0], time_series.iloc[-1]), fill_value=0)
     time_series['pytime'] = time_series.index
-    time_series.columns = ['Number of Sightings', movieDf2.iloc[indexvalue]['Movie']]
+    time_series.columns = ['Number of Sightings', movie_df2.iloc[index_value]['Movie']]
     time_series['rolling'] = time_series['Number of Sightings'].rolling('30D').mean()  # rollingmean to correct for seasonal changes
 
-    return [time_series, dateLow, dateHigh, release, releaseWindow[0]]
+    return [time_series, date_low, date_high, release, release_window[0]]
 
-def movieWindowPlot(dataframe):
+
+def movie_window_plot(dataframe):
+    '''
+    This function will return a graph showing the average number of sightings two weeks before and two weeks after
+    a movie release date. The function should be called by passing movie_sightings(int) as the argument. movie_sighings
+    will pass the release date of the movie to get_date_range and pass it along with other information to movie window
+    plot.
+    :param dataframe: This is actually a list dataframe[0] is the time_series dataframe, [1:3] is a series of useful dates
+    and [4] is a release window helpful for focusing the plot.
+    :return: plot of average sightings during a date range.
+    '''
 
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1)
-    releaseDate = dataframe[3]
-
+    release_date = dataframe[3]
 
     ax.set_xlim(dataframe[4][0], dataframe[4][-1])
 
     xaxis = [datetime.strftime(i, '%b %d') for i in dataframe[4]]
 
-    ax.set_xlabel('Days Before and After Release (release day =' + ' ' + str(releaseDate.strftime("%B %d")) + ')')
+    ax.set_xlabel('Days Before and After Release (release day =' + ' ' + str(release_date.strftime("%B %d")) + ')')
     ax.set_ylabel('Number of Sightings')
     ax.set_title('UFO Sightings During the Release of ' + str(dataframe[0].columns.get_values()[1]))
     ax.set_xticks(dataframe[4])
@@ -238,7 +177,7 @@ def movieWindowPlot(dataframe):
     count = 0
     for i in dataframe[4]:
         if i.weekday() == 5:
-             ax.get_xticklabels()[count].set_color("black")
+            ax.get_xticklabels()[count].set_color("black")
 
         elif i.weekday() == 6:
             ax.get_xticklabels()[count].set_color("black")
@@ -250,8 +189,6 @@ def movieWindowPlot(dataframe):
 
     ax.get_xticklabels()[14].set_color("red")
     plt.xticks(rotation=70)
-
-
 
     ax.plot(dataframe[0].index, dataframe[0]['rolling'])
 
@@ -268,42 +205,61 @@ def movieWindowPlot(dataframe):
     plt.show()
 
 
-def yearGraph(startdate, enddate):
-    mask = (ufoDf['Date'] > startdate) & (ufoDf['Date'] <= enddate)
-    time_series = pd.DataFrame(ufoDf.loc[mask]['Date'].value_counts())  # it may be worthwhile to reset the index and sort the col
-    time_series2 = pd.DataFrame(ufoDf.loc[mask]['Date'].value_counts())
+def year_graph(start_date, end_date):
+    '''
+    This function will take two strings in the form of 'YYYYMMDD' and return a graph of the average number of UFO
+    sightings for the given date range.
+
+    :param start_date: a string like '19990101' in the format of YYYYMMDD
+    :param end_date: a string like '19990101' in the format of YYYYMMDD
+    :return: plot
+    '''
+    mask = (ufo_df['Date'] > start_date) & (ufo_df['Date'] <= end_date)
+    time_series = pd.DataFrame(ufo_df.loc[mask]['Date'].value_counts())  # it may be worthwhile to reset the index and sort the col
+    time_series2 = pd.DataFrame(ufo_df.loc[mask]['Date'].value_counts())
     time_series2 = time_series2.sort_index()
     time_series = time_series.resample('D').sum().fillna(0) # Resample to return the missing days to the df
     time_series = time_series.sort_index()
-    time_series = time_series.reindex(pd.date_range(startdate, enddate), fill_value=0)
+    time_series = time_series.reindex(pd.date_range(start_date, end_date), fill_value=0)
     time_series.columns = ['Number of Sightings']
     time_series['rolling'] = time_series['Number of Sightings'].rolling('180D').mean()
 
-    xfilesDf = pd.read_csv('xfiles.csv')
-    xfilesDf = xfilesDf.set_index('Air Date')
-    xfilesDf.index = pd.to_datetime(xfilesDf.index)
-    #xfilesDf = xfilesDf.resample('D').sum().fillna(0)
-    xfilesDf = xfilesDf.sort_index()
-    xfilesDf['Roll'] = xfilesDf['Viewers (millions)'].rolling('30D').mean()
-    #xfilesDf['Roll'] = xfilesDf['Roll'].rolling(12).mean()
+    xfiles_df = pd.read_csv('xfiles.csv')
+    xfiles_df = xfiles_df.set_index('Air Date')
+    xfiles_df.index = pd.to_datetime(xfiles_df.index)
+    # xfiles_df = xfiles_df.resample('D').sum().fillna(0)
+    xfiles_df = xfiles_df.sort_index()
+    xfiles_df['Roll'] = xfiles_df['Viewers (millions)'].rolling('30D').mean()
+    # xfiles_df['Roll'] = xfiles_df['Roll'].rolling(12).mean()
 
-    plt_y = time_series['rolling']#time_series2['Date'].rolling(12).mean()
+    plt_y = time_series['rolling']  # time_series2['Date'].rolling(12).mean()
     plt_x = time_series.index
 
-    plt_x2 = xfilesDf.index
-    plt_y2 = xfilesDf['Viewers (millions)'] * .16
+    plt_x2 = xfiles_df.index
+    plt_y2 = xfiles_df['Viewers (millions)'] * .16
 
     plt.plot(plt_x, plt_y) # ufo sightings
-    #plt.plot(plt_x2, plt_y2) # xfiles ratings
+    # plt.plot(plt_x2, plt_y2) # xfiles ratings
     plt.show()
 
-def yearGraphSeasonal():
-    mask = (ufoDf['Date'] > '1987-1-1') & (ufoDf['Date'] <= '1988-12-31')
-    time_series = pd.DataFrame(ufoDf.loc[mask]['Date'].value_counts())  # it may be worthwhile to reset the index and sort the col
+def annotated_bestseller():
+    '''
+    The release of the book "Communion" by Whitley Strieber was one of the most important events in the pop culture
+    history of UFOs. With its striking cover, the book cemented the image of the pallid, almond eyed, extraterrestrial
+    in the public consciousness. The book, which Strieber claims is a true account, is also the source for the well
+    known trope of alien anal probes as parodied in the first episode of the popular television show South Park.
+
+    This function seeks to explore if the release of the book and its 1987 climb to the top of the NYT Bestseller list
+    had an effect on the frequency of UFO sightings during the year.
+
+    :return: plot
+    '''
+    mask = (ufo_df['Date'] > '1987-1-1') & (ufo_df['Date'] <= '1988-12-31')
+    time_series = pd.DataFrame(ufo_df.loc[mask]['Date'].value_counts())  # it may be worthwhile to reset the index and sort the col
     time_series = time_series.resample('D').sum().fillna(0)
     time_series = time_series.sort_index()
     time_series = time_series.reindex(pd.date_range("1987-01-01", "1988-12-31"), fill_value=0)
-    #time_series = time_series.set_index('index')
+    # time_series = time_series.set_index('index')
 
     time_series['rolling'] = time_series['Date'].rolling(12).mean()
     corrections = time_series['rolling']
@@ -317,14 +273,14 @@ def yearGraphSeasonal():
     ax.set_title('Increase in Sightings During the Release of Communion')
 
     corrections.plot(ax=ax, style='k-')
-    #plt.plot(time_series['index'], data)
+    # plt.plot(time_series['index'], data)
     nyt_data = dict([(datetime.datetime(1987, 3, 1), 'Communion\nenters NYT\nBestseller List\nat #12'),
-                (datetime.datetime(1987, 3, 25), 'Communion\nreaches #3'),
-                (datetime.datetime(1987, 5, 10), 'Communion is the\n#1 Bestseller'),
-                (datetime.datetime(1987, 7, 2), 'Communion falls out of top 3'),
-                (datetime.datetime(1987, 8, 9), 'Falls to #11'),
-                (datetime.datetime(1987, 8, 30), 'Rises to #8'),
-                (datetime.datetime(1987, 9, 20), 'Last week on\nlist as #15')])
+                     (datetime.datetime(1987, 3, 25), 'Communion\nreaches #3'),
+                     (datetime.datetime(1987, 5, 10), 'Communion is the\n#1 Bestseller'),
+                     (datetime.datetime(1987, 7, 2), 'Communion falls out of top 3'),
+                     (datetime.datetime(1987, 8, 9), 'Falls to #11'),
+                     (datetime.datetime(1987, 8, 30), 'Rises to #8'),
+                     (datetime.datetime(1987, 9, 20), 'Last week on\nlist as #15')])
 
     ax.annotate(nyt_data.values()[0], xy=(nyt_data.keys()[0], corrections.asof(nyt_data.keys()[0]) + .2),
                 xytext=(nyt_data.keys()[0], corrections.asof(nyt_data.keys()[0]) + 1.33),
@@ -360,38 +316,61 @@ def yearGraphSeasonal():
 
     plt.show()
 
-
-def yearGraphSeasonal2(dataframe):
-    start_time = datetime.datetime.strptime(str(startdate), '%Y%m%d')
-    end_time = datetime.datetime.strptime(str(enddate), '%Y%m%d')
-
-    mask = (ufoDf['Date'] > start_time.strftime('%Y-%m-%d')) & (ufoDf['Date'] <= end_time.strftime('%Y-%m-%d')) & (ufoDf['Shape'] != 'LIGHT') & (ufoDf['Shape'] != 'FLASH')
-    #mask = (ufoDf['Date'] > start_time.strftime('%Y-%m-%d')) & (ufoDf['Date'] <= end_time.strftime('%Y-%m-%d'))
+# The following functions are no longer working and are being kept for reference.
 
 
-    time_series = pd.DataFrame(ufoDf.loc[mask]['Date'].value_counts())  # it may be worthwhile to reset the index and sort the col
-    time_series = time_series.resample('D').sum().fillna(0)
-    time_series = time_series.sort_index()
-    time_series = time_series.reindex(pd.date_range(start_time, end_time), fill_value=0)
-    time_series['pytime'] = time_series.index
-    #time_series['pytime'] = time_series['pytime'].astype(int)
-    #time_series = time_series.set_index('index')
+def sightings_by_year():
+    """
+    Not working. Use year_graph() instead.
 
-    time_series['pytime_f'] = pd.factorize(time_series['pytime'])[0] + 1
-    mapping = dict(zip(time_series['pytime_f'], time_series['pytime'].dt.date))
+    :return: line plot of ufo sightings by year
+    """
+    year_df = ufo_df.Year.value_counts()
+    year_df = year_df.sort_index(ascending=False)
+    year_df = year_df.iloc[:-75]
+    year_df = year_df.reset_index()
+    year_df.columns = ['Year', 'Number of Sightings']
 
+    xfiles_df = pd.read_csv('xfiles.csv')
+    xfiles_df = xfiles_df.set_index('Air Date')
+    xfiles_df.index = pd.to_datetime(xfiles_df.index)
 
-    time_series['rolling'] = time_series['Date'].rolling(12).mean()
-    time_series['diff'] = time_series['Date'].diff(4)
-    corrections = time_series['rolling']
-    y = time_series['Date']
-    x = time_series['pytime']
-    diff = time_series['diff']
+    plt_x = year_df.Year
+    plt_y = year_df['Number of Sightings']
+
+    plt_x2 = xfiles_df.index
+    plt_y2 = xfiles_df['Viewers (millions)']
+
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1)
+    ax.set_title('Number of Sightings by Year (1974-Present)')
+    ax.set_xlabel('Year')
+    ax.set_ylabel('Number of Sightings')
 
-    #ax = sns.regplot('pytime_f','rolling', time_series, marker='+', order=2, ci=None, truncate=True)
-    #labels = pd.Series(ax.get_xticks()).map(mapping).fillna('')
-    #ax.set_xticklabels(labels)
-    ax = plt.plot(time_series.index, corrections, linewidth=.3)
+    plt.plot(plt_x, plt_y)
+    #plt.plot(plt_x2, plt_y2 * 1000)
     plt.show()
+
+
+def annual_heatmap():
+    """
+    No longer working. Use heatmap() instead.
+    :return: plot
+    """
+    df2 = ufo_df.groupby(['Year', 'Month', 'Date', 'Shape']).agg(len)
+    df2 = df2.drop(['Duration', 'Summary', 'Time', 'State', 'City', 'Posted'], axis=1)
+    df2.columns = ['Number of Occurances', 'untitled']
+    df2 = df2.unstack(fill_value=0)
+    df2 = df2.stack()
+
+    df3 = df2.groupby(['Year', 'Month', 'Date']).sum()
+    df3 = df3.groupby(['Month', 'Date']).mean()
+    df3 = df3.reset_index()
+    df3 = df3.pivot('Month', 'Date', 'Number of Occurances')
+    grid_kws = {"height_ratios": (.9, .05), "hspace": .3}
+    f, (ax, cbar_ax) = plt.subplots(2, gridspec_kw=grid_kws)
+    cbar_ax.set_title('Number of Sightings')
+    ax = sns.heatmap(df3, vmin=5, vmax=16, square=True, linewidth=0.3, ax=ax, cbar_ax=cbar_ax,
+                     cbar_kws={"orientation": "horizontal"})
+    plt.show()
+
