@@ -46,7 +46,7 @@ for index, row in ufoDf.iterrows():
         location = geolocator.geocode(str(row.City) + ', ' + str(row.State), timeout=10)
         latLongDf = latLongDf.append({'Lat': str(location.latitude), 'Long': str(location.longitude)}, ignore_index=True)
 
-    except AttributeError:
+    except (AttributeError, GeocoderTimedOut):
         latLongDf = latLongDf.append({'Lat': 'NaN', 'Long': 'Nan'}, ignore_index=True)
         pass
 
