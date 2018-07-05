@@ -1,6 +1,7 @@
 import pandas as pd
 from datetime import datetime
 from geopy.geocoders import GoogleV3
+from geopy.exc import GeocoderTimedOut
 import ssl
 
 ssl._create_default_https_context = ssl._create_unverified_context
@@ -43,11 +44,12 @@ geolocator = GoogleV3(api_key="AIzaSyAvCT6XhLxybEdGNLboSDjOu5KkXWhTC6w")
 
 for index, row in ufoDf.iterrows():
     try:
-        location = geolocator.geocode(str(row.City) + ', ' + str(row.State), timeout=10)
+        location = geolocator.geocode(str(row.City) + ', ' + str(row.State), timeout=None)
         latLongDf = latLongDf.append({'Lat': str(location.latitude), 'Long': str(location.longitude)}, ignore_index=True)
 
     except (AttributeError, GeocoderTimedOut):
         latLongDf = latLongDf.append({'Lat': 'NaN', 'Long': 'Nan'}, ignore_index=True)
+
         pass
 
 
