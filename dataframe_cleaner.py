@@ -60,3 +60,23 @@ for index, row in ufoDf.iterrows():
 latLongDf.to_csv('ll.csv')
 
 
+filename = pd.read_csv('ll.csv')ssl._create_default_https_context = ssl._create_unverified_context
+
+df = pd.DataFrame(filename)
+
+df[Long] = df['Long'].str[:7].fillna(0)
+df[Long] = pd.to_numeric(df.Long)
+df.Lat = df.Lat.round(2)
+df.Long = df.Long.round(2)
+
+df = df.drop(['Unnamed: 0'])
+
+df.plot(kind='scatter', x=Long, y=Lat, alpha=0.4)
+
+
+df.columns = ['Latitude', 'Longitude']
+from mapsplotlib import mapsplot as mplt
+
+mplt.register_api_key('AIzaSyAvCT6XhLxybEdGNLboSDjOu5KkXWhTC6w')
+
+mplt.plot_markers(df)
