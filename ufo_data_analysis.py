@@ -6,6 +6,10 @@ import seaborn as sns
 from datetime import datetime
 from datetime import timedelta
 #from matplotlib import dates
+from mapsplotlib import mapsplot as mplt
+import ssl
+
+ssl._create_default_https_context = ssl._create_unverified_context
 
 
 pd.set_option('display.expand_frame_repr', False)
@@ -352,6 +356,42 @@ def sightings_by_year():
     plt.show()
 
 
+
+
+def mapping():
+
+    filename = pd.read_csv('ll.csv')
+
+    df = pd.DataFrame(filename)
+
+    df['Long'] = df['Long'].str[:7]
+    df['Long'] = df['Long'].replace({'Nan': '0'})
+    df['Long'] = pd.to_numeric(df.Long)
+    df['Lat'] = df['Lat'].fillna(0)
+    df.Lat = df.Lat.round(2)
+    df.Long = df.Long.round(2)
+
+    df = df.drop(['Unnamed: 0'], axis=1)
+
+    df.plot(kind='scatter', x='Long', y='Lat', alpha=0.4)
+
+
+    df.columns = ['latitude', 'longitude']
+
+
+    mplt.register_api_key('AIzaSyAvCT6XhLxybEdGNLboSDjOu5KkXWhTC6w')
+
+    mplt.plot_markers(df)
+
+
+
+
+#######################################################################################################################
+#
+# None of the functions below this line are working. They are being kept for refrence purposes.
+#
+#
+########################################################################################################################
 def annual_heatmap():
     """
     No longer working. Use heatmap() instead.
