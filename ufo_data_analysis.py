@@ -8,6 +8,8 @@ from datetime import timedelta
 #from matplotlib import dates
 from mapsplotlib import mapsplot as mplt
 import ssl
+import plotly.plotly as py
+import plotly.graph_objs as go
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
@@ -360,9 +362,9 @@ def sightings_by_year():
 
 def mapping():
 
-    filename = pd.read_csv('ll.csv')
+    csv_name = pd.read_csv('ll.csv')
 
-    df = pd.DataFrame(filename)
+    df = pd.DataFrame(csv_name)
 
     df['Long'] = df['Long'].str[:7]
     df['Long'] = df['Long'].replace({'Nan': '0'})
@@ -378,13 +380,19 @@ def mapping():
 
     df.columns = ['latitude', 'longitude']
 
+    data = [go.Scattermapbox(df['latitude'], df['longitude'])]
 
-    mplt.register_api_key('AIzaSyAvCT6XhLxybEdGNLboSDjOu5KkXWhTC6w')
+    layout = go.Layout(autosize=True, hovermode='closest', pitch=0, zoom=10)
+    fig = dict(data=data, layout=layout)
+    py.iplot(fig, filename='multiple mapbox')
 
-    mplt.plot_markers(df)
 
+   # mplt.register_api_key('AIzaSyAvCT6XhLxybEdGNLboSDjOu5KkXWhTC6w')
 
-
+   # mplt.density_plot(df['latitude'], df['longitude'])
+   # mplt.polygons(df['latitude'], df['longitude'])
+   # mplt.heatmap(df['latitude'], df['longitude'])
+   # mplt.density_plot(df['latitude'], df['longitude'])
 
 #######################################################################################################################
 #
