@@ -378,7 +378,7 @@ def mapping():
 
     df.columns = ['latitude', 'longitude']
 
-    map = folium.Map()
+    map = folium.Map(tiles='Mapbox Bright')
 
     coords = []
     
