@@ -7,11 +7,8 @@ from datetime import datetime
 from datetime import timedelta
 #from matplotlib import dates
 from mapsplotlib import mapsplot as mplt
-import ssl
-import plotly.plotly as py
-import plotly.graph_objs as go
-
-ssl._create_default_https_context = ssl._create_unverified_context
+import folium
+from folium.plugins import HeatMap
 
 
 pd.set_option('display.expand_frame_repr', False)
@@ -19,6 +16,7 @@ pd.set_option('display.expand_frame_repr', False)
 
 ufo_df = pd.read_csv('ufo_reports.csv')
 ufo_df.Date = pd.to_datetime(ufo_df[['Year', 'Month', 'Day']], errors='coerce')
+ufo_df2 =  pd.merge(ufo_df, ll_df, left_index=True, right_index=True) # ufo_df2 contains lat long data
 
 
 def shape_graph():
@@ -380,11 +378,22 @@ def mapping():
 
     df.columns = ['latitude', 'longitude']
 
-    data = [go.Scattermapbox(df['latitude'], df['longitude'])]
+    map = folium.Map()
 
-    layout = go.Layout(autosize=True, hovermode='closest', pitch=0, zoom=10)
-    fig = dict(data=data, layout=layout)
-    py.iplot(fig, filename='multiple mapbox')
+    coords = []
+    
+    for incex, row in df.iterrows():
+        coords.append(tuple([row.latitude, row.longitude]))
+
+    map.add_child(HeatMap(coords, min_opacity=.25, radius=15, max_zoom=13))
+
+    map.save('map.html')
+    
+   # data = [go.Scattermapbox(df['latitude'], df['longitude'])]
+
+   # layout = go.Layout(autosize=True, hovermode='closest', mapbox=dict(accesstoken=mapbox_access_token, bearing=0, center=dict(lat=38.92,lon=-77.07), pitch=0, zoom=10)
+   # fig = dict(data=data, layout=layout)
+   # py.iplot(fig, filename='multiple mapbox')
 
 
    # mplt.register_api_key('AIzaSyAvCT6XhLxybEdGNLboSDjOu5KkXWhTC6w')
