@@ -16,7 +16,8 @@ pd.set_option('display.expand_frame_repr', False)
 
 ufo_df = pd.read_csv('ufo_reports.csv')
 ufo_df.Date = pd.to_datetime(ufo_df[['Year', 'Month', 'Day']], errors='coerce')
-ufo_df2 =  pd.merge(ufo_df, ll_df, left_index=True, right_index=True) # ufo_df2 contains lat long data
+ll_df = pd.read_csv('ll.csv')
+ufo_df2 = pd.merge(ufo_df, ll_df, left_index=True, right_index=True)  # ufo_df2 contains lat long data
 
 
 def shape_graph():
@@ -378,11 +379,11 @@ def mapping():
 
     df.columns = ['latitude', 'longitude']
 
-    map = folium.Map(tiles='Mapbox Bright')
+    map = folium.Map(tiles='OpenStreetMap')
 
     coords = []
     
-    for incex, row in df.iterrows():
+    for index, row in df.iterrows():
         coords.append(tuple([row.latitude, row.longitude]))
 
     map.add_child(HeatMap(coords, min_opacity=.25, radius=15, max_zoom=13))
