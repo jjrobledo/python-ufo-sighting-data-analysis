@@ -8,7 +8,7 @@ from datetime import timedelta
 #from matplotlib import dates
 from mapsplotlib import mapsplot as mplt
 import folium
-from folium.plugins import HeatMap
+from folium.plugins import HeatMap, HeatMapWithTime
 
 
 pd.set_option('display.expand_frame_repr', False)
@@ -16,7 +16,11 @@ pd.set_option('display.expand_frame_repr', False)
 
 ufo_df = pd.read_csv('ufo_reports.csv')
 ufo_df.Date = pd.to_datetime(ufo_df[['Year', 'Month', 'Day']], errors='coerce')
+ll_df = pd.read_csv('ll.csv')
 ufo_df2 =  pd.merge(ufo_df, ll_df, left_index=True, right_index=True) # ufo_df2 contains lat long data
+ufo_df2['Lat'] = ufo_df2['Lat'].fillna(0)
+ufo_df2['Long'] = ufo_df2['Long'].replace({'Nan': '0'})
+ufo_df2['Long'] = pd.to_numeric(ufo_df2['Long'])
 
 
 def shape_graph():
@@ -96,6 +100,35 @@ def heatmap():
     ax = sns.heatmap(x3, square=True, vmin=100, vmax=600, center=200, linewidths=.03, ax=ax, cbar_ax=cbar_ax,
                      cbar_kws={"orientation": "horizontal"})
     plt.show()
+    '''
+    start_time = '19991231'
+    end_time = '20001231'
+    df = ufo_df.groupby('Date')
+    df = ufo_df.groupby('Date').agg(len)
+    df = df.resample('D').sum().fillna(0)
+    df = df.drop(['Time', 'City', 'State', 'Shape', 'Duration', 'Summary', 'Posted', 'Year', 'Month', 'Day'], axis=1)
+    df = df.reset_index()
+    mask = (df.Date > start_time) & (df.Date <= end_time)
+    sightings = pd.DataFrame(df.loc[mask])
+    sightings.columns = ['Date', 'Count']
+    sightings = sightings.set_index('Date')
+    sightings['Year'] = sightings.index.year
+    sightings['Month'] = sightings.index.month
+    sightings['Day'] = sightings.index.day
+    x = sightings.groupby(['Year', 'Month', 'Day']).sum()
+    x = x['Count']rolling(12).sum().dropna()
+    x2 = x.groupby(['Month', 'Day']).sum()
+    x3 = x2.pivot_table(index='Month', columns='Day', values='Count')
+    grid_kws = {"height_ratios": (.9, .05), "hspace": .3}
+    f, (ax, cbar_ax) = plt.subplots(2, gridspec_kw=grid_kws)
+    cbar_ax.set_title('Number of Sightings')
+    ax = sns.heatmap(x3, square=True, vmax=35, linewidths=.03, ax=ax, cbar_ax=cbar_ax,
+                     cbar_kws={"orientation": "horizontal"})
+    ax.set_title('UFO Sightings for the year ' + end_time[:4])
+    plt.show()
+    '''
+
+    
 
 
 movie_df2 = pd.read_csv('ufo-movie-releases.csv')
@@ -368,8 +401,8 @@ def mapping():
     df['Long'] = df['Long'].replace({'Nan': '0'})
     df['Long'] = pd.to_numeric(df.Long)
     df['Lat'] = df['Lat'].fillna(0)
-    df.Lat = df.Lat.round(2)
-    df.Long = df.Long.round(2)
+    df.Lat = df.Lat.round(3)
+    df.Long = df.Long.round(3)
 
     df = df.drop(['Unnamed: 0'], axis=1)
 
@@ -378,17 +411,36 @@ def mapping():
 
     df.columns = ['latitude', 'longitude']
 
-    map = folium.Map(tiles='Mapbox Bright')
+    map = folium.Map(tiles='stamentoner')
 
     coords = []
-    
-    for incex, row in df.iterrows():
+
+    for index, row in df.iterrows():
         coords.append(tuple([row.latitude, row.longitude]))
 
-    map.add_child(HeatMap(coords, min_opacity=.25, radius=15, max_zoom=13))
+    hm = HeatMap(coords, min_opacity=.25, radius=15, max_zoom=13)
+    hm.add_to(map)
 
     map.save('map.html')
     
+    list1 = []
+
+    for i in range(2016, 2017):
+        list2 = []
+        list1.append(list2)
+        for j in range(1, 13):
+            list3 = []
+            list2.append(list3)
+            for index, row in ufo_df2.iterrows():
+                if row['Date'].year == i and row['Date'].month == j:
+                    lt_lon = [row['Lat'], row['Long']]
+                    list3.append(lt_lon)
+
+    map2 = folium.Map(tiles='stamentoner')
+    hmt = HeatMapWithTime(list1)
+    hmt.add_to(map2)
+    map2.save('time.html')
+     
    # data = [go.Scattermapbox(df['latitude'], df['longitude'])]
 
    # layout = go.Layout(autosize=True, hovermode='closest', mapbox=dict(accesstoken=mapbox_access_token, bearing=0, center=dict(lat=38.92,lon=-77.07), pitch=0, zoom=10)
