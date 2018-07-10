@@ -422,25 +422,26 @@ def mapping():
     hm.add_to(map)
 
     map.save('map.html')
-    
-    list1 = []
 
-    for i in range(2016, 2017):
-        list2 = []
-        list1.append(list2)
+    list_list = []
+
+    for i in range(1995, 2005):
+        list_list1 = []
+        year_list = []
+        list_list1 = list_list.extend(year_list)
         for j in range(1, 13):
-            list3 = []
-            list2.append(list3)
+            month_list = []
+            list_list.append(month_list)
             for index, row in ufo_df2.iterrows():
                 if row['Date'].year == i and row['Date'].month == j:
                     lt_lon = [row['Lat'], row['Long']]
-                    list3.append(lt_lon)
+                    month_list.append(lt_lon)
 
     map2 = folium.Map(tiles='stamentoner')
-    hmt = HeatMapWithTime(list1)
+    hmt = HeatMapWithTime(list_list)
     hmt.add_to(map2)
     map2.save('time.html')
-     
+
    # data = [go.Scattermapbox(df['latitude'], df['longitude'])]
 
    # layout = go.Layout(autosize=True, hovermode='closest', mapbox=dict(accesstoken=mapbox_access_token, bearing=0, center=dict(lat=38.92,lon=-77.07), pitch=0, zoom=10)
