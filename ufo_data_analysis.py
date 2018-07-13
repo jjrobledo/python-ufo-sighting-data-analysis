@@ -18,10 +18,15 @@ pd.set_option('display.expand_frame_repr', False)
 ufo_df = pd.read_csv('ufo_reports.csv')
 ufo_df.Date = pd.to_datetime(ufo_df[['Year', 'Month', 'Day']], errors='coerce')
 ll_df = pd.read_csv('ll.csv')
+
 ufo_df2 =  pd.merge(ufo_df, ll_df, left_index=True, right_index=True) # ufo_df2 contains lat long data
 ufo_df2['Lat'] = ufo_df2['Lat'].fillna(0)
 ufo_df2['Long'] = ufo_df2['Long'].replace({'Nan': '0'})
 ufo_df2['Long'] = pd.to_numeric(ufo_df2['Long'])
+
+movie_df2 = pd.read_csv('ufo-movie-releases.csv')
+movie_df2 = movie_df2.drop(['Unnamed: 0', 'Unnamed: 0.1.1'], axis=1)
+movie_df2["Release Date"] = pd.to_datetime(movie_df2['Release Date']) # Change the dtpye of the release date col to type datetime
 
 
 def shape_graph():
@@ -30,13 +35,16 @@ def shape_graph():
 
     :return: bar graph plot
     """
+    
     ufo_shape_array = []
+
+    # fill ufo_shape_array with unique shape names from the df
     for i in ufo_df.Shape.str.upper().unique():
         ufo_shape_array.append(i)
 
-    shape_counts = pd.DataFrame(ufo_df.Shape.value_counts())
-    shape_counts = shape_counts.drop(['EMPTY', 'HEXAGON', 'CRESCENT', 'PYRAMID', 'DOME'])  # Remove values that are of little value
-    shape_counts.columns = ['Count']
+    shape_counts = pd.DataFrame(ufo_df.Shape.value_counts()) # get the counts for each shape
+    shape_counts = shape_counts.drop(['EMPTY', 'HEXAGON', 'CRESCENT', 'PYRAMID', 'DOME'])  # remove values that are of little value
+    shape_counts.columns = ['Count'] # rename column
 
     ax = plt.subplots()
 
@@ -59,17 +67,24 @@ def sightings_by_shape():
     df1.columns = ['Number of Occurances', 'Untitled']
     df1 = df1.unstack(fill_value=0)
     df1 = df1.stack()
+
+    # Some shapes have very low counts that, if included, would add even more distraction to the plot.
     mask = (df['Shape'] != 'DOME') & (df['Shape'] != 'CROSS') & (df['Shape'] != 'CONE') & (df['Shape'] != 'HEXAGON') & (df['Shape'] != 'PYRAMID') & (df['Shape'] != 'CRESCENT')
+    # apply the mask
     df2 = df[mask]
 
+    # make the plot
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1)
+
+    # for loop to fill the axes
     for shape in df2.Shape.unique():
         x_axis = df1['Number of Occurances'][:, shape][-45:].index
         y_axis = df1['Number of Occurances'][:, shape][-45:].values
         ax.set_title('Number of UFO Sightings by Shape (1974-present)')
         ax.set_xticks(np.arange(1974, 2019, 4))
         plt.plot(x_axis, y_axis, label=shape)
+
     ax.legend(loc=2, fontsize='x-small')
     ax.set_xlabel('Year')
     ax.set_ylabel('Number of Sightings')
@@ -77,6 +92,8 @@ def sightings_by_shape():
 
 
 def heatmap():
+
+    
     start_time = '1974-01-01'
     end_time = '20180531'
     df = ufo_df.groupby('Date')
@@ -129,14 +146,7 @@ def heatmap():
     plt.show()
     '''
 
-
-
-
-movie_df2 = pd.read_csv('ufo-movie-releases.csv')
-movie_df2 = movie_df2.drop(['Unnamed: 0', 'Unnamed: 0.1.1'], axis=1)
-movie_df2["Release Date"] = pd.to_datetime(movie_df2['Release Date']) # Change the dtpye of the release date col to type datetime
-
-
+    
 def get_date_range(movie_release_date):
     '''
     This function will take a datetime object from movie_sightings() and return a range of days before and after
@@ -147,9 +157,12 @@ def get_date_range(movie_release_date):
 
     release = movie_release_date
     day_list = []
+    # day_high and low are calculated using time delta to generate a two week release window on either side of the release date
     date_high = movie_release_date + timedelta(days=16)
     date_low = movie_release_date - timedelta(days=14)
     delta = date_high - date_low
+
+    # for loop to generate a list of dates
     for i in range(delta.days):
         day_list.append(date_low + timedelta(i))
 
@@ -165,24 +178,25 @@ def movie_sightings(index_value):
 
     '''
 
-    date = movie_df2['Release Date'][index_value]
-    release_window = get_date_range(date)
-    date_low = release_window[0][0]
-    date_high = release_window[0][-1]
-    release = release_window[1]
+    date = movie_df2['Release Date'][index_value] # get the release date from the column by checking the index
+    release_window = get_date_range(date) # call the get_date range function to get the release window
+    date_low = release_window[0][0] # the returned value from get_date_range() was a tuple so we need to go deep to get the values
+    date_high = release_window[0][-1] # ibid
+    release = release_window[1] # the movie release date
     year_start = datetime.strptime(str(date_low.year) + '0101', '%Y%m%d').date()
     year_end = datetime.strptime(str(date_high.year + 1) + '0101', '%Y%m%d').date()
 
-    year_mask = (ufo_df['Date'] > year_start) & (ufo_df['Date'] <= year_end)
+    year_mask = (ufo_df['Date'] > year_start) & (ufo_df['Date'] <= year_end) # make a mask so we only get the date range we need
     # mask = (ufo_df['Date'] > date_low) & (ufo_df['Date'] <= date_high)
 
+    # we now have a time series based on the mask
     time_series = pd.DataFrame(ufo_df.loc[year_mask]['Date'].value_counts())  # it may be worthwhile to reset the index and sort the col
     time_series = time_series.resample('D').sum().fillna(0)
     time_series = time_series.sort_index()
     # time_series = time_series.reindex(pd.date_range(time_series.iloc[0], time_series.iloc[-1]), fill_value=0)
     time_series['pytime'] = time_series.index
     time_series.columns = ['Number of Sightings', movie_df2.iloc[index_value]['Movie']]
-    time_series['rolling'] = time_series['Number of Sightings'].rolling('30D').mean()  # rollingmean to correct for seasonal changes
+    time_series['rolling'] = time_series['Number of Sightings'].rolling('30D').mean()
 
     return [time_series, date_low, date_high, release, release_window[0]]
 
@@ -198,13 +212,14 @@ def movie_window_plot(dataframe):
     :return: plot of average sightings during a date range.
     '''
 
+    # make the figure
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1)
-    release_date = dataframe[3]
+    release_date = dataframe[3] # pull the release date from movie_sightings() which should have been passed as the argument
 
-    ax.set_xlim(dataframe[4][0], dataframe[4][-1])
+    ax.set_xlim(dataframe[4][0], dataframe[4][-1]) # set the high and low dates based on the return from movie_sightings()
 
-    xaxis = [datetime.strftime(i, '%b %d') for i in dataframe[4]]
+    xaxis = [datetime.strftime(i, '%b %d') for i in dataframe[4]] # make a fancy list of dates for the xaxis
 
     ax.set_xlabel('Days Before and After Release (release day =' + ' ' + str(release_date.strftime("%B %d")) + ')')
     ax.set_ylabel('Number of Sightings')
@@ -213,6 +228,9 @@ def movie_window_plot(dataframe):
     ax.set_xticklabels(xaxis)
 
     count = 0
+
+    # for loop to color the xticklables based on the numeric day of the week
+    # does it matter if a movie is released on a weekend vs. weekday?
     for i in dataframe[4]:
         if i.weekday() == 5:
             ax.get_xticklabels()[count].set_color("black")
@@ -274,10 +292,16 @@ def year_graph(start_date, end_date):
     plt_x = time_series.index
 
     plt_x2 = xfiles_df.index
-    plt_y2 = xfiles_df['Viewers (millions)'] * .16
+    plt_y2 = xfiles_df['Viewers (millions)'] * .16 # correct the xfiles ratings in millions to fit on the time series
 
-    plt.plot(plt_x, plt_y) # ufo sightings
-    # plt.plot(plt_x2, plt_y2) # xfiles ratings
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    ax.set_title('Number of UFO sightings')
+    plt.plot(plt_x, plt_y, label='Average number of UFO Sightings') # ufo sightings
+    plt.plot(plt_x2, plt_y2, label= 'Number of Weekly Viewers for The X-Files (millions)') # xfiles ratings
+    ax.set_xlabel('Year')
+    ax.set_ylabel('Number of Sightings')
+    ax.legend(loc='best')
     plt.show()
 
 def annotated_bestseller():
@@ -354,8 +378,6 @@ def annotated_bestseller():
 
     plt.show()
 
-# The following functions are no longer working and are being kept for reference.
-
 
 def sightings_by_year():
     """
@@ -393,10 +415,11 @@ def sightings_by_year():
 
 
 def mapping():
-
-    csv_name = pd.read_csv('ll.csv') # Read in the list of lat/longs
-
-    df = pd.DataFrame(csv_name) # convert the csv to dataframe
+    
+    # Read in the list of lat/longs
+    csv_name = pd.read_csv('ll.csv')
+    # convert the csv to dataframe
+    df = pd.DataFrame(csv_name) 
 
     df['Long'] = df['Long'].str[:7] 
     df['Long'] = df['Long'].replace({'Nan': '0'}) # remove Nan values
@@ -407,33 +430,38 @@ def mapping():
     df = df.drop(['Unnamed: 0'], axis=1) # drop unused axis
     df.columns = ['latitude', 'longitude'] # rename columns
 
-    map = folium.Map(tiles='stamentoner') # create a folium map for all UFO sightings
+    # init list of lat/long coords for folium map
+    coords = []
 
-    coords = [] # init list of lat/long coords for folium map
-
-    for index, row in df.iterrows(): # fill the list of coords
+    # fill the list of coords
+    for index, row in df.iterrows():
         coords.append(tuple([row.latitude, row.longitude]))
 
-    hm = HeatMap(coords, min_opacity=.25, radius=15, max_zoom=13) # create the heatmap 
-    hm.add_to(map) # add the heatmap to the folium map
+    # create a folium map for all UFO sightings
+    map = folium.Map(tiles='stamentoner')
+    # create the heatmap
+    hm = HeatMap(coords, min_opacity=.25, radius=15, max_zoom=13)
+    # add the heatmap to the folium map
+    hm.add_to(map)
+    # save the map to disk
+    map.save('heatmap.html')
 
-    map.save('heatmap.html') # save the map to disk
 
-
-    ####################################################
-    #
     # This section will generate a folium HeatMapWithTime
     # HeatMapWithTime() takes a list of lists to generate the map
-    #
-    #
-    ####################################################
 
-    list_list = [] # list of lists. It contains monthly sighting data for each month of each year between start_date and end_date.
-    date_list = [] # list of formatted dates to use as the HeatMapWithTime() index
-    start_date = datetime.strptime('20150101', '%Y%m%d') # heat map start date
-    end_date = datetime.strptime('20171231', '%Y%m%d') # heat map end date
-    date = start_date # date list will help us calculate the timedelta()
-    month_delta = relativedelta(months=+1) # the timedelta() to iterate months
+    # list of lists. It contains monthly sighting data for each month of each year between start_date and end_date
+    list_list = []
+    # list of formatted dates to use as the HeatMapWithTime() index
+    date_list = []
+    # HeatMapWithTime() start date
+    start_date = datetime.strptime('20150101', '%Y%m%d')
+    # HeatMapWithTime() end date
+    end_date = datetime.strptime('20171231', '%Y%m%d')
+    # date list will help us calculate the timedelta()
+    date = start_date
+    # the timedelta() to iterate months
+    month_delta = relativedelta(months=+1)
 
     # While loop to fill date_list
     while date <= end_date:
