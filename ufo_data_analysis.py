@@ -9,6 +9,7 @@ from datetime import timedelta
 from mapsplotlib import mapsplot as mplt
 import folium
 from folium.plugins import HeatMap, HeatMapWithTime
+from dateutil.relativedelta import relativedelta
 
 
 pd.set_option('display.expand_frame_repr', False)
@@ -128,7 +129,7 @@ def heatmap():
     plt.show()
     '''
 
-    
+
 
 
 movie_df2 = pd.read_csv('ufo-movie-releases.csv')
@@ -393,39 +394,54 @@ def sightings_by_year():
 
 def mapping():
 
-    csv_name = pd.read_csv('ll.csv')
+    csv_name = pd.read_csv('ll.csv') # Read in the list of lat/longs
 
-    df = pd.DataFrame(csv_name)
+    df = pd.DataFrame(csv_name) # convert the csv to dataframe
 
-    df['Long'] = df['Long'].str[:7]
-    df['Long'] = df['Long'].replace({'Nan': '0'})
-    df['Long'] = pd.to_numeric(df.Long)
-    df['Lat'] = df['Lat'].fillna(0)
-    df.Lat = df.Lat.round(3)
+    df['Long'] = df['Long'].str[:7] 
+    df['Long'] = df['Long'].replace({'Nan': '0'}) # remove Nan values
+    df['Long'] = pd.to_numeric(df.Long) # convert the column to numeric values
+    df['Lat'] = df['Lat'].fillna(0) # fill any Nan values with 0s
+    df.Lat = df.Lat.round(3) # round the columns for compatability with folium
     df.Long = df.Long.round(3)
+    df = df.drop(['Unnamed: 0'], axis=1) # drop unused axis
+    df.columns = ['latitude', 'longitude'] # rename columns
 
-    df = df.drop(['Unnamed: 0'], axis=1)
+    map = folium.Map(tiles='stamentoner') # create a folium map for all UFO sightings
 
-    df.plot(kind='scatter', x='Long', y='Lat', alpha=0.4)
+    coords = [] # init list of lat/long coords for folium map
 
-
-    df.columns = ['latitude', 'longitude']
-
-    map = folium.Map(tiles='stamentoner')
-
-    coords = []
-
-    for index, row in df.iterrows():
+    for index, row in df.iterrows(): # fill the list of coords
         coords.append(tuple([row.latitude, row.longitude]))
 
-    hm = HeatMap(coords, min_opacity=.25, radius=15, max_zoom=13)
-    hm.add_to(map)
+    hm = HeatMap(coords, min_opacity=.25, radius=15, max_zoom=13) # create the heatmap 
+    hm.add_to(map) # add the heatmap to the folium map
 
-    map.save('map.html')
+    map.save('heatmap.html') # save the map to disk
 
-    list_list = []
 
-    for i in range(1995, 2005):
+    ####################################################
+    #
+    # This section will generate a folium HeatMapWithTime
+    # HeatMapWithTime() takes a list of lists to generate the map
+    #
+    #
+    ####################################################
+
+    list_list = [] # list of lists. It contains monthly sighting data for each month of each year between start_date and end_date.
+    date_list = [] # list of formatted dates to use as the HeatMapWithTime() index
+    start_date = datetime.strptime('20150101', '%Y%m%d') # heat map start date
+    end_date = datetime.strptime('20171231', '%Y%m%d') # heat map end date
+    date = start_date # date list will help us calculate the timedelta()
+    month_delta = relativedelta(months=+1) # the timedelta() to iterate months
+
+    # While loop to fill date_list
+    while date <= end_date:
+        date_list.append(date.strftime('%B %Y'))
+        date += month_delta
+
+    # Nested for loop to create list_list 
+    for i in range(start_date.year, (end_date.year + 1)):
         list_list1 = []
         year_list = []
         list_list1 = list_list.extend(year_list)
@@ -437,24 +453,16 @@ def mapping():
                     lt_lon = [row['Lat'], row['Long']]
                     month_list.append(lt_lon)
 
+
+    # map2 will be the folium map for the HeatMapWithTime()
     map2 = folium.Map(tiles='stamentoner')
-    hmt = HeatMapWithTime(list_list)
+    # hmt will be the folium HeatMapWithTime() 
+    hmt = HeatMapWithTime(list_list, index=date_list)
+    # add the HeatMapWithTime to map2
     hmt.add_to(map2)
-    map2.save('time.html')
-
-   # data = [go.Scattermapbox(df['latitude'], df['longitude'])]
-
-   # layout = go.Layout(autosize=True, hovermode='closest', mapbox=dict(accesstoken=mapbox_access_token, bearing=0, center=dict(lat=38.92,lon=-77.07), pitch=0, zoom=10)
-   # fig = dict(data=data, layout=layout)
-   # py.iplot(fig, filename='multiple mapbox')
-
-
-   # mplt.register_api_key('AIzaSyAvCT6XhLxybEdGNLboSDjOu5KkXWhTC6w')
-
-   # mplt.density_plot(df['latitude'], df['longitude'])
-   # mplt.polygons(df['latitude'], df['longitude'])
-   # mplt.heatmap(df['latitude'], df['longitude'])
-   # mplt.density_plot(df['latitude'], df['longitude'])
+    # save map2 to disk
+    map2.save('heatmap_with_time.html')
+   
 
 #######################################################################################################################
 #
