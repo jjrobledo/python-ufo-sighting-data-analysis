@@ -46,7 +46,7 @@ def movie_lookup():
     df3.to_csv('ufo_movie_releases.csv')
 
 
-filename2 = pd.read_csv('ufo_movie_releases.csv')
+#filename2 = pd.read_csv('ufo_movie_releases.csv')
 df3 = pd.DataFrame(filename2)
 
 

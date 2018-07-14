@@ -46,6 +46,7 @@ def shape_graph():
     shape_counts = shape_counts.drop(['EMPTY', 'HEXAGON', 'CRESCENT', 'PYRAMID', 'DOME'])  # remove values that are of little value
     shape_counts.columns = ['Count'] # rename column
 
+    fig = plt.figure()
     ax = plt.subplots()
 
     ax = shape_counts.plot.barh()
@@ -75,7 +76,7 @@ def sightings_by_shape():
 
     # make the plot
     fig = plt.figure()
-    ax = fig.add_subplot(1, 1, 1)
+    ax = fig.add_subplot(111)
 
     # for loop to fill the axes
     for shape in df2.Shape.unique():
