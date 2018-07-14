@@ -4,7 +4,7 @@ from geopy.geocoders import GoogleV3
 from geopy.exc import GeocoderTimedOut
 import ssl
 
-ssl._create_default_https_context = ssl._create_unverified_context
+#ssl._create_default_https_context = ssl._create_unverified_context #  need to configure ssl, uncomment for the program to run correctly in the mean time.
 
 pd.set_option('display.expand_frame_repr', False)
 
@@ -18,7 +18,7 @@ ufoDf = ufoDf.drop(['Unnamed: 0'], axis=1)
 # Rename columns
 ufoDf.columns = ['Date', 'City', 'State', 'Shape', 'Duration', 'Summary', 'Posted', 'Year', 'Month']
 
-# Separate date and time
+# Separate date and time and do some cleanup
 ufoDf = ufoDf[ufoDf.Date.str.contains('Date / Time') == False]
 ufoDfCopy = ufoDf['Date'].str[:].str.split(' ', expand=True) # ufoDfCopy contains two columns - the date has been seperated from time
 ufoDf = ufoDfCopy.join(ufoDf) # join the new dataframe to the old dataframe as new columsn
@@ -29,19 +29,17 @@ ufoDf['Shape'] = ufoDf['Shape'].fillna(value='EMPTY')
 ufoDf['Shape'] = ufoDf['Shape'].str.upper()
 # ufoDf.Date = pd.to_datetime(ufoDf[['Day', 'Month', 'Year', 'Time']], format='%d%m%y', errors='ignore')
 ufoDf.Date = pd.to_datetime(ufoDf[['Year', 'Month', 'Day']], errors='coerce')
-
+# replacements will be used to aggregate shapes that are essentially the same, assuming they are all 3 dimensional objects. e.g. triangle/delta or teardrop/egg
 replacements = {'Shape': {'TRIANGULAR': 'TRIANGLE', 'DELTA': 'TRIANGLE', 'TEARDROP': 'OVAL', 'EGG': 'OVAL', 'CIGAR': 'CYLINDER', 'FLASH': 'FLARE', 'CHANGED': 'CHANGING', 'CIRCLE': 'DISK', 'ROUND': 'DISK'}}
 ufoDf = ufoDf.replace(replacements)
 
 
 # Get the lat and long for each city/state reported
 
-
-
 latLongDf = pd.DataFrame(columns = ['Lat', 'Long'])
+geolocator = GoogleV3(api_key="API_KEY")
 
-geolocator = GoogleV3(api_key="AIzaSyAvCT6XhLxybEdGNLboSDjOu5KkXWhTC6w")
-
+# for loop gets the lat and long for each city, state and appends to a new dataframe
 for index, row in ufoDf.iterrows():
     try:
         location = geolocator.geocode(str(row.City) + ', ' + str(row.State), timeout=None)
@@ -57,4 +55,4 @@ for index, row in ufoDf.iterrows():
 # Save the modified dataframe to a new CSV
 #ufoDf.to_csv('ufo_reports1.csv')
 
-latLongDf.to_csv('ll.csv')
+#latLongDf.to_csv('ll.csv')

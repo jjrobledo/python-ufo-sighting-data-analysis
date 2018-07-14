@@ -24,7 +24,7 @@ ufo_df2['Lat'] = ufo_df2['Lat'].fillna(0)
 ufo_df2['Long'] = ufo_df2['Long'].replace({'Nan': '0'})
 ufo_df2['Long'] = pd.to_numeric(ufo_df2['Long'])
 
-movie_df2 = pd.read_csv('ufo-movie-releases.csv')
+movie_df2 = pd.read_csv('ufo_movie_releases.csv')
 movie_df2 = movie_df2.drop(['Unnamed: 0', 'Unnamed: 0.1.1'], axis=1)
 movie_df2["Release Date"] = pd.to_datetime(movie_df2['Release Date']) # Change the dtpye of the release date col to type datetime
 
