@@ -1,4 +1,4 @@
-This project aims at examining data gathered by the [National UFO Reporting Center (NUFORC)](http://www.nuforc.org/). 
+This project aims at gathering, manipulating and examining data gathered by the [National UFO Reporting Center (NUFORC)](http://www.nuforc.org/). 
 
 ## Getting Started
 
@@ -116,6 +116,8 @@ It also generates a really cool heat map with time by passing a list of lists to
 Both heat maps are saved as .html files. Users can open them as web pages, pan the map and zoom in/out on specific areas. The heat map with time add the ability to play the data frame by frame (month by month).
 
 It should be noted that the during the geocoding some location lookups returned the wrong latitudes/longitudes. I'm not exactly sure how many, but it shouldn't affect the final map too much and they probably represent the heat spots in unusual places, like the middle of the ocean.
+
+**IMPORTANT**  In order to see the heat map data on the map you may need to turn off your ad blocker.
 
 ### Included CSV files
 
