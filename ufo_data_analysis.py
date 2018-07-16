@@ -45,6 +45,10 @@ def shape_graph():
     shape_counts = shape_counts.drop(['EMPTY', 'HEXAGON', 'CRESCENT', 'PYRAMID', 'DOME'])  # remove values that are of little value
     shape_counts.columns = ['Count'] # rename column
 
+    # Percent of total sightings
+    for i in shape_counts.index.unique():
+        print(i + (str(((shape_counts.loc[i]['Count'] / shape_counts.sum()) * 100).values.round(2)))) 
+
     fig = plt.figure()
     ax = plt.subplots()
 
@@ -297,10 +301,10 @@ def year_graph(start_date, end_date):
     fig = plt.figure()
     ax = fig.add_subplot(111)
     ax.set_title('Number of UFO sightings')
-    plt.plot(plt_x, plt_y, label='Average number of UFO Sightings') # ufo sightings
+    plt.plot(plt_x, plt_y, label='Average Number of Daily Sightings') # ufo sightings
     #plt.plot(plt_x2, plt_y2, label= 'Number of Weekly Viewers for The X-Files (millions)') # xfiles ratings
     ax.set_xlabel('Year')
-    ax.set_ylabel('Number of Sightings')
+    ax.set_ylabel('Average Number of Daily Sightings')
     plt.xticks(rotation=70)
     ax.legend(loc='best')
     plt.show()
