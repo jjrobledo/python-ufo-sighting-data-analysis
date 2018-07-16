@@ -9,7 +9,7 @@ import ssl
 pd.set_option('display.expand_frame_repr', False)
 
 # Read in the CSV and assign it to the variable ufoDf
-filename = pd.read_csv('dataframe.csv')
+filename = pd.read_csv('./csv/dataframe.csv')
 ufoDf = pd.DataFrame(filename)
 
 # Drop an unused column
@@ -53,6 +53,6 @@ for index, row in ufoDf.iterrows():
 
 
 # Save the modified dataframe to a new CSV
-#ufoDf.to_csv('ufo_reports1.csv')
+ufoDf.to_csv('./csv/ufo_reports1.csv')
 
-#latLongDf.to_csv('ll.csv')
+latLongDf.to_csv('./csv/ll.csv')

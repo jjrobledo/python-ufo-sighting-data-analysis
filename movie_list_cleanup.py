@@ -6,7 +6,7 @@ from datetime import datetime, date, time, timedelta
 pd.set_option('display.expand_frame_repr', False)
 
 # Read in the CSV and assign it to the variable ufoDf
-filename = pd.read_csv('ufo movies.csv')  # The file contains a list of movies I grabbed from the wikipedia page on UFOs in movies
+filename = pd.read_csv('./csv/ufo movies.csv')  # The file contains a list of movies I grabbed from the wikipedia page on UFOs in movies
 movieDf = pd.DataFrame(filename)
 ia = IMDb()
 
@@ -14,7 +14,7 @@ df2 = movieDf['Movie'].str[:].str.split(' - ', expand=True)  # Split the single 
 df2[1] = df2[1].str[:4]  # Strip everything but the first four characters assuming that is the release year and discard everything else.
 df2 = df2.dropna(how='all')  # drop rows that contain NaN
 df2.columns = ['Movie', 'Year', 'Release Date'] # rename the columns
-df2.to_csv('clean_movie_list.csv')
+df2.to_csv('./csv/clean_movie_list.csv')
 
 movieList = []
 
@@ -43,14 +43,14 @@ def movie_lookup():
         except (KeyError, IndexError):
             pass
     print('Done!')
-    df3.to_csv('ufo_movie_releases.csv')
+    df3.to_csv('./csv/ufo_movie_releases.csv')
 
 
-#filename2 = pd.read_csv('ufo_movie_releases.csv')
+#filename2 = pd.read_csv('./csv/ufo_movie_releases.csv')
 df3 = pd.DataFrame(filename2)
 
 
 df3['Release Date'] = df3['Release Date'].map(lambda x: str(x)[:11])  # strip the date out of the column
 df3['Release Date'] = pd.to_datetime(df3['Release Date'])  # Change the dtype of the column
 
-df3.to_csv('ufo_movie_releases.csv')
+df3.to_csv('./csv/ufo_movie_releases.csv')

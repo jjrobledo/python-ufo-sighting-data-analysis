@@ -56,12 +56,14 @@ sightings_by_shape() reads the same dataframe of UFO sightings and plots the fre
 
 ```python
 x_axis = df1['Number of Occurances'][:, shape][-45:].index
+y_axis = df1['Number of Occurances'][:, shape][-45:].values
 ```
 
 to
 
 ```python
 x_axis = df1['Number of Occurances'][:, shape][-55:].index
+y_axis = df1['Number of Occurances'][:, shape][-55:].values
 ```
 
 

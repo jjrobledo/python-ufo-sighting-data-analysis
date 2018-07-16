@@ -26,7 +26,7 @@ def get_ufo_links():
 
 def parse_links(link_list):
     '''
-    follows each link and looks for table data. Table data is then appended to a dataframe and saved
+    follows each link and looks for table data. Table data is then appended to a dataframe and saved./csv/
     as a .csv
 
     Can take up to an hour to run
@@ -51,7 +51,7 @@ def parse_links(link_list):
             print("Scraped %s entries" % (count))
 
 
-    df1.to_csv('dataframe.csv')
+    df1.to_csv('./csv/dataframe.csv')
 
 
 parse_links(get_ufo_links())
