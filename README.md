@@ -129,7 +129,7 @@ It should be noted that the during the geocoding some location lookups returned 
 
 One of th first questions we can ask is if you were to see an unusual object in the sky, in other words a UFO, what shape is is most likely to be? We can answer that question by calling `shape_graph`.
 
-![](/home/jrobledo/Projects/ufo-scraper/images/shape_graph.png)
+![](./images/shape_graph.png)
 
 
 
@@ -141,17 +141,17 @@ It turns out that about 21 percent of the 111742 sightings tallied by `shape_cou
 
 The next thing we should ask is how UFO sighting reports have changed over time. 
 
-![](/home/jrobledo/Projects/ufo-scraper/images/yearly_sighting_reports.png)
+![](./images/yearly_sighting_reports.png)
 
 The graph above gives us a 6 month rolling average of daily UFO sightings from 1974 to May 31 2018. The first thing to notice is the dramatic increase in sightings beginning around 1995. Sightings continue to rise from the mid 90s till they peak around 2014. One other interesting thing to look at is the seasonality of the data; we'll look at this more closely in a bit, but for now we can say that there is a correlation between the time of the year and the number of reported UFO sightings.
 
 Why the  rolling average? Well, without doing some interpolation its difficult to see the over all trend of the data. It also allows us to see the seasonality on a line graph. Heres a look at the the data without the rolling average: 
 
-![](/home/jrobledo/Projects/ufo-scraper/images/no_roll.png)
+![](./images/no_roll.png)
 
 
 
-We can also see how the shapes of reported UFOs have changed over time by calling `year_graph()`:![](/home/jrobledo/Projects/ufo-scraper/images/sightings_by_shape.png)
+We can also see how the shapes of reported UFOs have changed over time by calling `year_graph()`:![](./images/sightings_by_shape.png)
 
 By looking at the graph we can see that same dramatic increase in sightings that began in the mid 90s as well as the peak in 2014. This graph also shows us just how steeply UFO sighting reports have decline since 2016. This is because this graph plots only the number of sightings reported and doesn't take into account the days where no reports were filed (this also accounts for the dramatic difference between the two previous graphs. 
 
@@ -159,7 +159,7 @@ Unfortunately, this graph is difficult to look at since there are so many lines 
 
 By changing the mask in `year_graph()` we can isolate some of the more interesting shape trends:
 
-![](/home/jrobledo/Projects/ufo-scraper/images/light_disk_tri.png)
+![](./images/light_disk_tri.png)
 
 Here we have only 4 shapes to deal with. We can more clearly see that prior to 1986 disk shaped UFOs were the most commonly reported shape before a decline in the mid 80s. When Sightings jumped around 1995 we see that light reports see the biggest increase and continue to be the most commonly reported UFO. One of the stranger observations is the two peaks on the line depicting sightings of fireball UFOs sightings. It shows a small peak around 1999 before leveling out; and then it rises dramatically from 2010 to 2012. Disk and light shaped UFOs do as well, but triangle shapes, along with many others from the previous graph, show a much less dramatic increase.
 
