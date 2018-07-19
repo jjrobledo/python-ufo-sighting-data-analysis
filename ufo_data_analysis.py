@@ -98,7 +98,7 @@ def sightings_by_shape():
 def heatmap():
 
     
-    start_time = '1974-01-01'
+    start_time = '19731231'
     end_time = '20180531'
     df = ufo_df.groupby('Date')
     df = ufo_df.groupby('Date').agg(len)
@@ -115,15 +115,58 @@ def heatmap():
     x = sightings.groupby(['Year', 'Month', 'Day']).sum()
 #   x = x['Count']rolling(12).sum().dropna()
     x2 = x.groupby(['Month', 'Day']).sum()
+
+    # What if I want to know what percetn of sightings occur on which days?
+    # In this case the days during meteor showers.
+    # z = x2.reset_index()
+    # count = 0
+    # for index, row in z.iterrows():
+    #      Perseids
+    #     if (row.Month == 7) & row.Day >= 17):
+    #         count += row.count
+    #     if (row.Month == 8) & (row.Day <= 24):
+    #         count += row.Count
+    #      Leonids
+    #     if (row.Month == 11) & (row.Day >= 6):
+    #         count += row.Count
+    #     Geminids
+    #     if (row.Month == 12) & ((row.Day >= 4) & (row.Day <= 17)):
+    #         count += row.Count
+    #
+    #     Around 23.1 percent of meteors occur on the dates of three big meteor showers
+    #     count / z.Count.sum()
+    #
+    #     What about Independence Day and New Years?
+    #
+    # for index, row in z.iterrows():
+    #     if (row.Month == 7) & ((row.Day >= 1) & (row.Day <= 7)):
+    #         count += row.Count
+    #     if (row.Month == 1) & (row.Day == 1):
+    #         count += row.Count
+    #     if (row.Month == 12) & (row.Day == 31):
+    #         count += row.Count
+    #
+    # There is another way to do this an preserve shapes. First, open this script in a python interpreter and enter your start time and end time. Then paste the following lines
+    #
+    # df = ufo_df.set_index('Date')
+    # df = df.drop(['Time', 'City', 'State', 'Duration', 'Summary', 'Posted', 'Year', 'Month', 'Day'], axis=1)
+    #
+    #mask = ((df.index.month == 7) & (df.index.day >= 17)) | ((df.index.month == 8) & (df.index.day <=24)) | ((df.index.month == 12) & (df.index.day >= 6)) | ((df.index.month == 12) & ((df.index.day >= 4) & (df.index.day <= 7)))    
+    #
+    # Percent fireball
+    # ((df.loc[mask].Shape == 'FIREBALL')).sum() / df.loc[mask]['Unnamed: 0'].sum()                     
+                                                              
+
     x3 = x2.pivot_table(index='Month', columns='Day', values='Count')
     grid_kws = {"height_ratios": (.9, .05), "hspace": .3}
     f, (ax, cbar_ax) = plt.subplots(2, gridspec_kw=grid_kws)
     cbar_ax.set_title('Number of Sightings')
-    ax = sns.heatmap(x3, square=True, vmin=100, vmax=600, center=200, linewidths=.03, ax=ax, cbar_ax=cbar_ax,
+    ax = sns.heatmap(x3, square=True, linewidths=.03, vmax=50, ax=ax, cbar_ax=cbar_ax,
                      cbar_kws={"orientation": "horizontal"})
+    ax.set_title('UFO Sightings for the year ' + end_time[:4])
     plt.show()
     '''
-    start_time = '19991231'
+    start_time = '20151231'
     end_time = '20001231'
     df = ufo_df.groupby('Date')
     df = ufo_df.groupby('Date').agg(len)
@@ -284,6 +327,9 @@ def year_graph(start_date, end_date):
     time_series.columns = ['Number of Sightings']
     time_series['rolling'] = time_series['Number of Sightings'].rolling('180D').mean()
 
+    # what if we want to exclude a date like Independency Day?
+    # time_series3 = time_series[(time_series.index.month != 7) & (time_series.index.day != 4)]
+
     xfiles_df = pd.read_csv('./csv/xfiles.csv')
     xfiles_df = xfiles_df.set_index('Air Date')
     xfiles_df.index = pd.to_datetime(xfiles_df.index)
@@ -382,41 +428,6 @@ def annotated_bestseller():
     plt.savefig('figpath.png', dpi=300)
 
     plt.show()
-
-
-def sightings_by_year():
-    """
-    Not working. Use year_graph() instead.
-
-    :return: line plot of ufo sightings by year
-    """
-    year_df = ufo_df.Year.value_counts()
-    year_df = year_df.sort_index(ascending=False)
-    year_df = year_df.iloc[:-75]
-    year_df = year_df.reset_index()
-    year_df.columns = ['Year', 'Number of Sightings']
-
-    xfiles_df = pd.read_csv('./csv/xfiles.csv')
-    xfiles_df = xfiles_df.set_index('Air Date')
-    xfiles_df.index = pd.to_datetime(xfiles_df.index)
-
-    plt_x = year_df.Year
-    plt_y = year_df['Number of Sightings']
-
-    plt_x2 = xfiles_df.index
-    plt_y2 = xfiles_df['Viewers (millions)']
-
-    fig = plt.figure()
-    ax = fig.add_subplot(1, 1, 1)
-    ax.set_title('Number of Sightings by Year (1974-Present)')
-    ax.set_xlabel('Year')
-    ax.set_ylabel('Number of Sightings')
-
-    plt.plot(plt_x, plt_y)
-    #plt.plot(plt_x2, plt_y2 * 1000)
-    plt.show()
-
-
 
 
 def mapping():
@@ -525,3 +536,35 @@ def annual_heatmap():
                      cbar_kws={"orientation": "horizontal"})
     plt.show()
 
+
+def sightings_by_year():
+    """
+    Not working. Use year_graph() instead.
+
+    :return: line plot of ufo sightings by year
+    """
+    year_df = ufo_df.Year.value_counts()
+    year_df = year_df.sort_index(ascending=False)
+    year_df = year_df.iloc[:-75]
+    year_df = year_df.reset_index()
+    year_df.columns = ['Year', 'Number of Sightings']
+
+    xfiles_df = pd.read_csv('./csv/xfiles.csv')
+    xfiles_df = xfiles_df.set_index('Air Date')
+    xfiles_df.index = pd.to_datetime(xfiles_df.index)
+
+    plt_x = year_df.Year
+    plt_y = year_df['Number of Sightings']
+
+    plt_x2 = xfiles_df.index
+    plt_y2 = xfiles_df['Viewers (millions)']
+
+    fig = plt.figure()
+    ax = fig.add_subplot(1, 1, 1)
+    ax.set_title('Number of Sightings by Year (1974-Present)')
+    ax.set_xlabel('Year')
+    ax.set_ylabel('Number of Sightings')
+
+    plt.plot(plt_x, plt_y)
+    #plt.plot(plt_x2, plt_y2 * 1000)
+    plt.show()
