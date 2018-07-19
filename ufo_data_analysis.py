@@ -264,8 +264,9 @@ def movie_window_plot(dataframe):
     ax = fig.add_subplot(1, 1, 1)
     release_date = dataframe[3] # pull the release date from movie_sightings() which should have been passed as the argument
 
-    ax.set_xlim(dataframe[4][0], dataframe[4][-1]) # set the high and low dates based on the return from movie_sightings()
-
+    ax.set_xlim(dataframe[4][0], dataframe[4][-1])# set the high and low dates based on the return from movie_sightings()
+    ax.set_ylim(0, 90)
+     
     xaxis = [datetime.datetime.strftime(i, '%b %d') for i in dataframe[4]] # make a fancy list of dates for the xaxis
 
     ax.set_xlabel('Days Before and After Release (release day =' + ' ' + str(release_date.strftime("%B %d")) + ')')
@@ -273,6 +274,7 @@ def movie_window_plot(dataframe):
     ax.set_title('UFO Sightings During the Release of ' + str(dataframe[0].columns.get_values()[1]))
     ax.set_xticks(dataframe[4])
     ax.set_xticklabels(xaxis)
+    #ax.set_yticks(np.arange(0,52, 2))
 
     count = 0
 
@@ -293,21 +295,22 @@ def movie_window_plot(dataframe):
     ax.get_xticklabels()[14].set_color("red")
     plt.xticks(rotation=70)
 
-    ax.plot(dataframe[0].index, dataframe[0]['rolling'])
+    ax.plot(dataframe[0].index, dataframe[0]['Number of Sightings'])
 
     '''
     red = mpatches.Patch(color='red', label='Release Date')
     black = mpatches.Patch(color='black', label='Weekend')
     plt.legend(handles=[red, black])
     '''
-
+    
+    
     print('The average number of daily sightings for the release window of ' + str(dataframe[0].columns.get_values()[1]) + ' was ' + str(dataframe[0]['Number of Sightings'].mean()) + ' sightings per day')
-    print(dataframe[0]['Number of Sightings'].std(), dataframe[0]['Number of Sightings'].median())
+    print(dataframe[0]['Number of Sightings'].std(), dataframe[0]['Number of Sightings'].mean())
     print('The average number of daily sightings for the year was ')
 
     plt.show()
 
-
+    
 def year_graph(start_date, end_date):
     '''
     This function will take two strings in the form of 'YYYYMMDD' and return a graph of the average number of UFO
