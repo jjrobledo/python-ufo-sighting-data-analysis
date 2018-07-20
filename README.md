@@ -219,7 +219,7 @@ Signs (2002) is another example of this difficulty. Not only are sighting report
 
 Battleship (2012) was released right around the time UFO sightings reach their all time high. The movie was released on a Friday, and by looking at this graph we can see that there is some kind of pattern related to UFO sightings and weekends. Reports seem to peak on or around Friday, stay high through the weekend and start to decline at the start of the week. 
 
-One other pop culture event was the publication of the book Communion by Whitley Strieber. The book purporting to be a true story, reached the top of the NYT best seller list in 1987 and was later turned into a feature film starring Christopher Walken in the role of Streiber. The book became the principle for many of the common tropes found in post 1980s UFO pop culture. Here is a time series of UFO reports during the year the book was published.
+One other pop culture event was the publication of the book [Communion](https://en.wikipedia.org/wiki/Communion_(book)) by Whitley Strieber. The book purporting to be a true story, reached the top of the NYT best seller list in 1987 and was later turned into a feature film starring Christopher Walken in the role of Streiber. The book became the principle for many of the common tropes found in post 1980s UFO pop culture. Here is a time series of UFO reports during the year the book was published.
 
 ![communion](./images/annotated_bestseller.png)
 
