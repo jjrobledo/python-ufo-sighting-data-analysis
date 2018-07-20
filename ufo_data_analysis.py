@@ -489,13 +489,15 @@ def mapping():
 
     # Nested for loop to create list_list 
     for i in range(start_date.year, (end_date.year + 1)):
-        list_list1 = []
+        list_list = []
         year_list = []
-        list_list1 = list_list.extend(year_list)
+        
         for j in range(1, 13):
             month_list = []
             list_list.append(month_list)
+            
             for index, row in ufo_df2.iterrows():
+                
                 if row['Date'].year == i and row['Date'].month == j:
                     lt_lon = [row['Lat'], row['Long']]
                     month_list.append(lt_lon)
