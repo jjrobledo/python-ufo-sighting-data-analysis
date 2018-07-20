@@ -219,9 +219,15 @@ Signs (2002) is another example of this difficulty. Not only are sighting report
 
 Battleship (2012) was released right around the time UFO sightings reach their all time high. The movie was released on a Friday, and by looking at this graph we can see that there is some kind of pattern related to UFO sightings and weekends. Reports seem to peak on or around Friday, stay high through the weekend and start to decline at the start of the week. 
 
-But all this is not to say that pop culture has no effect on the number of UFO sightings reported to the NUFORC. I believe it's fair to say that the t.v. series The X-Files has had more influence on the public mind as regards conspiracy theories and extraterrestrials than any other media property during the 1990s. Naturally, I wondered what effect The X-Files may have had on sighting reports.
+One other pop culture event was the publication of the book Communion by Whitley Strieber. The book purporting to be a true story, reached the top of the NYT best seller list in 1987 and was later turned into a feature film starring Christopher Walken in the role of Streiber. The book became the principle for many of the common tropes found in post 1980s UFO pop culture. Here is a time series of UFO reports during the year the book was published.
+
+![communion](./images/annotated_bestseller.png)
+
+At first it looks like sightings are rising with the book as it climbs the best seller list. But,  when you look at more than one year, you see the same seasonal effects. 
 
 ![x-files vs daily sightings](./images/xfiles.png)
+
+But all this is not to say that pop culture has no effect on the number of UFO sightings reported to the NUFORC. I believe it's fair to say that the t.v. series The X-Files has had more influence on the public mind as regards conspiracy theories and extraterrestrials than any other media property during the 1990s. Naturally, I wondered what effect The X-Files may have had on sighting reports.
 
 We saw this same graph earlier; however, this time I have overlaid the average number weekly viewers for The X-Files (in millions) on top of the average number of daily sightings and zoomed in on the 1990s. It is clear from looking at both graphs that the average number of daily sightings remained between .5 to 1 sighting per day, that is until The X-Files began its run. As the ratings of the X-Files increased toward 1998 the average number of daily sightings began to dramatically increase. Perhaps the influence of The X-Files raised the public consciousness of UFOs and extraterrestrials to a critical point in the late 1990s. Thus, when looking up at the sky and seeing an unusual object in the sky an observer was primed by pop culture and became more likely to attribute what they were observing to the broader UFO phenomena. Whereas in the past they would have shrugged their shoulders and assumed a more mundane explanation (airplane). Once pop culture primed media consumers to believe in the possibility that our airspace was being intruded upon by unknown forces, we see reports of UFOs take off.
 
