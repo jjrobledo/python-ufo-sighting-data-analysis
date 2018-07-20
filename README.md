@@ -145,7 +145,7 @@ The next thing we should ask is how UFO sighting reports have changed over time 
 
 The graph above gives us a 6 month rolling average of daily UFO sightings from 1974 to May 31 2018. The first thing to notice is the dramatic increase in sightings beginning around 1995. Sightings continue to rise from the mid 90s till they peak around 2014. One other interesting thing to look at is the seasonality of the data; we'll look at this more closely in a bit, but for now we can say that there is a correlation between the time of the year and the number of reported UFO sightings.
 
-Why the  rolling average? Well, without doing some interpolation its difficult to see the over all trend of the data. It also allows us to see the seasonality on a line graph. Heres a look at the the data without the rolling average: 
+Why the  rolling average? Well, without doing some interpolation its difficult to see the over all trend of the data. It also allows us to see the seasonality on a line graph. Heres a look at the the data without the rolling average (the unusual spikes are New Years Eve and Independence Day sighting reports): 
 
 ![](./images/no_roll.png)
 
@@ -187,7 +187,7 @@ But fireworks still seem like a major contributor to UFO reports. We can look at
 
 One correlation most wouldn't have guessed has to do with U.S. presidential elections. If you look at November 8th (U.S. election day) you'll see that there is a spike in sightings on that day. It seems as though stressful or highly emotional national events might be connected to a rise in UFO sightings. To illustrate let's look at a heat map of 2001:
 
-![](/home/jrobledo/Projects/ufo-scraper/images/heatmap_2001.png) 
+![](./images/heatmap_2001.png) 
 
 You may notice that there is a increase in the number of UFO sightings leading up to September 11 before peaking on 9/11. Thus, like the correlation we saw with election day, there seems to be some correlation with emotional events and UFO sightings.
 
@@ -195,22 +195,64 @@ You may notice that there is a increase in the number of UFO sightings leading u
 
 In looking at the heat map from 2001 you will also notice that there is a correlation between peak days of meteor showers and UFO sightings. For instance, in 2001 [November 18](https://www.imo.net/leonids-2001-updated-profile/) was the peak of the Leonid meteor shower (you can also see a slight increase around this date on the aggregated heat map - but, its not as obvious since peak days for meteor showers can drift on the calendar, not to mention being obscured by weather).  You can also make out the peak of the Perseids on both heat maps. In fact, when we add up the number of UFO sightings on the dates of three major meteor showers (1974 - present) - Perseids (17 July - 24 August), Leonids (6 November - 17 November) and Geminids (4 December - 17 December) - we find that 23 percent of all UFO sightings occurred on those dates. We may also ask what kind of UFOs are seen during meteor showers our first instinct being that sightings of fireballs must be higher. It turns out that around 7.6 percent of all UFO reports are of fireballs, and on the days of the sampled meteor showers fireballs  account for 8.6 percent of reports. If we look at a bar graph of UFO shapes during meteor showers we see that the frequency of each shape is roughly the same - again, light being the most commonly reported shape at 21.1 percent.
 
-![](/home/jrobledo/Projects/ufo-scraper/images/meteor_shapes.png)
+![](./images/meteor_shapes.png)
 
 ## Movie Releases and UFO Sighting Reports
 
-Can the Release of UFO themed movies affect the number of UFO reports? To investigate this question I used a list of [UFOs in Fiction](https://en.wikipedia.org/wiki/UFOs_in_fiction) that seemed appropriate for my purposes. Each movie is assigned a release window. Here are a few examples.
+Can the Release of UFO themed movies affect the number of UFO reports? To investigate this question I used a list of [UFOs in Fiction](https://en.wikipedia.org/wiki/UFOs_in_fiction) that seemed appropriate for my purposes. Each movie is assigned a release window. Here are a few examples:
+
+![](./images/close-encounter.png)
+
+A small increase in the number of reports on the day following the release of Close Encounters of the Third Kind and the days following. But,  the average number of daily sightings during the window is less than .5, while the average number of sights per day for 1977 year was 1 per day. If we made the windows smaller the average daily sightings would get closer to the yearly average of 1, but not much more than that. There just aren't enough data points here to draw any conclusions.
+
+![](./images/et.png)
+
+![](./images/predator.png)
+
+E.T. (1982) and Predator (1987) were released on the same week of June 5 years apart. Notice how the graphs look very similar. It seems that one of the major problems with looking at the effect movies have on sighting reports has to do with the calendrical and seasonal effects that I mentioned earlier. If we look back at the heat map we notice that May 31 and June 1st are prime days for UFO reports. 
+
+![](./images/signs.png)
+
+Signs (2002) is another example of this difficulty. Not only are sighting reports higher than the yearly average due to the higher number of reports in the summer. But, the movie was released on August 2nd, right in the middle of the Perseid meteor shower. You can even see the daily sighting reports rise until the Perseids peak in mid-August.
+
+![](./images/battleship.png)
+
+Battleship (2012) was released right around the time UFO sightigings reach their all time high. The movie was released on a Fiday, and by looking at this graph we can see that there is some kind of pattern related to UFO sightings and weekends. Reports seem to peak on or around Friday, stay high through the weekened and start to decline at the start of the week. 
+
+
+
+But all this is not to say that pop culture has no effect on the number of UFO sightings reported to the NUFORC. I believe it's fair to say that the t.v. series The X-Files has had more influence on the public mind as regards conspiracy theories and extraterrestrials than any other media property during the 1990s. Naturally, I wondered what effect The X-Files may have had on sighting reports.
+
+![](./images/xfiles.png)
+
+We saw this same graph earlier; however, this time I have overlaid the average number weekly viewers for The X-Files (in millions) on top of the average number of daily sightings and zoomed in on the 1990s. It is clear from looking at both graphs that the average number of daily sightings remained steady, that is until The X-Files began its run. As the ratings of the X-Files increased toward 1998 the average number of daily sightings was increasing as well. Perhaps the influence of The X-Files raised the public consciousness of UFOs and extraterrestrials to a critical point in the late 1990s. Thus, when looking up at the sky and seeing an unusual object in the sky an observer became more likely to attribute it to the broader UFO phenomena and report it to the NUFORC, whereas in the past they would have shrugged their shoulders and assumed a more mundane explanation (airplane). Once pop culture primed media consumers to believe in the possibility that our airspace was being intruded upon by unknown forces, reports of UFOs take off.
+
+# Mapping 
+
+I wanted to get a sense for how sighting reports were distributed geographically. I investigated a few different mapping libraries for Python before settling on `folium`.  I used it to generate two different and interactive maps. The first is a heat map of all reported UFO sightings. You can click on the image below to see the map for yourself.
+
+[![](./images/heatmap.png)](./images/heatmap.html)
+
+Notice how the sightings are clustered along major population corridors. I also mapped the sighing reports by month, starting in 1947. 
+
+[![](./images/heatmap-time.png)](./images/heatmap_with_time.html)
 
 
 
 
-<figure class="video_container">
-  <iframe src="https://www.youtube.com/embed/NoFLJLJ7abE" frameborder="0" allowfullscreen="true"> </iframe>
-</figure>
 
-<figure class="video_container">
-  <iframe src="./images/heatmap.html" frameborder="0" allowfullscreen="true"> </iframe>
-</figure>
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## Authors
 
