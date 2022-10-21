@@ -9,7 +9,7 @@ I recommend running the scripts in Python 2.7 for compatibility.
 The following Python libraries are required:
 
 ```python
-seaborn geopy folium matplotlib numpy pandas bs4
+seaborn geopy folium matplotlib numpy pandas bs4 
 ```
 
 ### Included Python Scripts
